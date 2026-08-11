@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UC Campus - Home</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/utils/navbar.css">
+  <link rel="stylesheet" href="/utils/footer.css">
+  <style>
+    .home-page {
+      background-color: var(--green-50);
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    .hero-section {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl) var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .hero-section::after {
+      content: '';
+      position: absolute;
+      bottom: -30%;
+      left: -10%;
+      width: 350px;
+      height: 350px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 50%;
+    }
+
+    .hero-section h1 {
+      font-size: 2.6rem;
+      margin: 0 0 var(--spacing-md);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+      line-height: 1.15;
+    }
+
+    .hero-section p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 1.1rem;
+      margin: 0 auto var(--spacing-lg);
+      max-width: 680px;
+      position: relative;
+      z-index: 1;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: var(--spacing-md);
+      position: relative;
+      z-index: 1;
+    }
+
+    .btn-hero {
+      border: 0;
+      border-radius: var(--radius-full);
+      padding: 0 32px;
+      min-height: 52px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      transition: all var(--transition-base);
+      font-size: var(--font-size-base);
+      gap: var(--spacing-sm);
+    }
+
+    .btn-hero-primary {
+      background: white;
+      color: var(--green-800);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-hero-secondary {
+      background: rgba(255, 255, 255, 0.15);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .btn-hero-secondary:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: 48px;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid rgba(46, 125, 50, 0.12);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-card .feature-icon {
+      width: 56px;
+      height: 56px;
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      margin-bottom: var(--spacing-md);
+      color: var(--green-700);
+      background: rgba(46, 125, 50, 0.1);
+      font-size: 1.4rem;
+    }
+
+    .feature-card h3 {
+      margin-bottom: var(--spacing-sm);
+      font-size: var(--font-size-lg);
+      color: var(--green-900);
+    }
+
+    .feature-card p {
+      color: var(--gray-600);
+      line-height: 1.7;
+      font-size: var(--font-size-sm);
+      margin: 0;
+    }
+
+    .section-intro {
+      text-align: center;
+      max-width: 760px;
+      margin: 0 auto var(--spacing-xl);
+    }
+
+    .section-intro .eyebrow {
+      display: inline-block;
+      background: var(--green-100);
+      color: var(--green-800);
+      padding: 4px 16px;
+      border-radius: var(--radius-full);
+      font-size: var(--font-size-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .section-intro h2 {
+      font-size: 2.2rem;
+      color: var(--green-900);
+      margin: 0 0 var(--spacing-md);
+      font-weight: 700;
+    }
+
+    .section-intro p {
+      color: var(--gray-600);
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    .video-section {
+      margin-bottom: 64px;
+    }
+
+    .pagination {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-top: 28px;
+      color: var(--gray-600);
+      font-size: var(--font-size-sm);
+    }
+
+    .page-info {
+      min-width: 110px;
+      text-align: center;
+      color: var(--green-800);
+      font-weight: 600;
+    }
+
+    .video-player {
+      max-width: 1000px;
+      margin: 0 auto;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid rgba(255,255,255,0.9);
+    }
+
+    .video-player iframe {
+      width: 100%;
+      min-height: 520px;
+    }
+
+    .policies-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: 64px;
+    }
+
+    .policy-item {
+      background: white;
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--gray-200);
+      padding: var(--spacing-xl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .policy-item h3 {
+      margin-bottom: var(--spacing-md);
+      color: var(--gray-900);
+      font-size: var(--font-size-lg);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+    }
+
+    .policy-item h3 i {
+      color: var(--gray-500);
+    }
+
+    .policy-item ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .policy-item ul li {
+      color: var(--gray-600);
+      line-height: 1.8;
+      font-size: var(--font-size-sm);
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .policy-item ul li::before {
+      content: '•';
+      color: var(--gray-300);
+      font-weight: bold;
+      position: absolute;
+      left: 4px;
+    }
+
+    .events-section {
+      margin-bottom: 64px;
+    }
+
+    .events-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: var(--spacing-lg);
+      margin-top: var(--spacing-lg);
+    }
+
+    .event-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(46, 125, 50, 0.12);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+
+    .event-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .event-image {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+    }
+
+    .event-content {
+      padding: var(--spacing-lg);
+    }
+
+    .event-title {
+      margin: 0 0 var(--spacing-md);
+      font-size: var(--font-size-lg);
+      color: var(--green-900);
+    }
+
+    .event-meta {
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-sm);
+      margin-bottom: var(--spacing-sm);
+      color: var(--gray-600);
+      font-size: var(--font-size-sm);
+    }
+
+    .event-meta i {
+      color: var(--green-600);
+      width: 16px;
+    }
+
+
+    .no-events {
+      text-align: center;
+      padding: var(--spacing-2xl);
+      color: var(--gray-500);
+    }
+
+    .no-events img {
+      width: 120px;
+      opacity: 0.5;
+      margin-bottom: var(--spacing-md);
+    }
+
+    @media (max-width: 768px) {
+      .hero-section h1 {
+        font-size: 2rem;
+      }
+      .video-player iframe {
+        min-height: 280px;
+      }
+      .section-intro h2 {
+        font-size: 1.6rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="home-page">
+    <div class="container">
+      <!-- Hero Section -->
+      <section class="hero-section">
+        <h1>Streamline reservations and campus facilities with confidence</h1>
+        <p>Book spaces, manage approvals, and stay on top of campus activity through a modern, professional portal.</p>
+        <div class="hero-actions">
+          <a href="/user/reservation" class="btn-hero btn-hero-primary">
+            <i class="fas fa-calendar-plus"></i> Make a Reservation
+          </a>
+          <a href="/user/my-sarf-forms" class="btn-hero btn-hero-secondary">
+            <i class="fas fa-file-alt"></i> My Forms
+          </a>
+        </div>
+      </section>
+
+      <!-- Features -->
+      <section class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-calendar-check"></i></div>
+          <h3>Quick Reservations</h3>
+          <p>Secure rooms and venues fast with transparent availability and approval status.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-user-shield"></i></div>
+          <h3>Role-Based Access</h3>
+          <p>Separate admin and user flows so every campus booking is handled by the right team.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon"><i class="fas fa-chart-line"></i></div>
+          <h3>Live Updates</h3>
+          <p>Monitor upcoming events and reservation activity with a clean dashboard experience.</p>
+        </div>
+      </section>
+
+      <!-- Video Section -->
+      <section class="video-section">
+        <div class="section-intro">
+          <span class="eyebrow">Campus Tour</span>
+          <h2>See how UC Campus booking works</h2>
+          <p>Watch a quick overview of the reservation workflow and campus management improvements.</p>
+        </div>
+        <div class="video-player">
+          <iframe
+            src="https://www.youtube.com/embed/dUpaM3xeGIc?autoplay=1&mute=1&loop=1&playlist=dUpaM3xeGIc"
+            title="Campus Overview"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+        </div>
+      </section>
+
+      <!-- Policies -->
+      <section class="policies">
+        <div class="section-intro">
+          <span class="eyebrow">Policies & Guidelines</span>
+          <h2>Reservation rules made simple</h2>
+          <p>Review the key policies before submitting a reservation so your booking is approved smoothly.</p>
+        </div>
+        <div class="policies-grid">
+          <div class="policy-item">
+            <h3><i class="fas fa-clock"></i> Booking Requirements</h3>
+            <ul>
+              <li>Submit requests at least 2 weeks before your event.</li>
+              <li>Provide three completed copies of the form.</li>
+              <li>Attach a signed department request letter.</li>
+            </ul>
+          </div>
+          <div class="policy-item">
+            <h3><i class="fas fa-calendar-check"></i> Reservation Policies</h3>
+            <ul>
+              <li>Reservations depend on availability and approval.</li>
+              <li>Events outside 7:30 AM–7:30 PM require exemptions.</li>
+              <li>No same-day bookings are accepted.</li>
+            </ul>
+          </div>
+          <div class="policy-item">
+            <h3><i class="fas fa-building"></i> Facility Usage</h3>
+            <ul>
+              <li>Respect capacity limits and keep spaces tidy.</li>
+              <li>Report damages immediately to the CMO.</li>
+              <li>Certain venues prohibit smoking, eating, and drinking.</li>
+            </ul>
+          </div>
+          <div class="policy-item">
+            <h3><i class="fas fa-exclamation-triangle"></i> Penalties</h3>
+            <ul>
+              <li>Violations may cancel your reservation.</li>
+              <li>Repeated issues can suspend booking privileges.</li>
+              <li>Damages may lead to repair and replacement fees.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- Events -->
+      <section class="events-section">
+        <div class="section-intro">
+          <span class="eyebrow">Upcoming Events</span>
+          <h2>Campus events you should know about</h2>
+        </div>
+        <div class="events-grid" id="events"></div>
+        <div class="pagination">
+          <button class="btn btn-primary btn-sm" id="prevBtn"><i class="fas fa-chevron-left"></i> Previous</button>
+          <span id="pageInfo" class="page-info">Page 1 of 1</span>
+          <button class="btn btn-primary btn-sm" id="nextBtn">Next <i class="fas fa-chevron-right"></i></button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script>
+    let eventsData = [];
+    let currentPage = 1;
+    const eventsPerPage = 3;
+
+    async function fetchEvents() {
+      try {
+        const response = await fetch('/api/events');
+        if (response.ok) {
+          eventsData = await response.json();
+        } else {
+          console.error('Failed to fetch events');
+          eventsData = [];
+        }
+        displayEvents();
+      } catch (error) {
+        console.error('Error fetching events:', error);
+        eventsData = [];
+        displayEvents();
+      }
+    }
+
+    function displayEvents() {
+      const eventsContainer = document.getElementById('events');
+      const startIndex = (currentPage - 1) * eventsPerPage;
+      const endIndex = startIndex + eventsPerPage;
+      const currentEvents = eventsData.slice(startIndex, endIndex);
+
+      if (currentEvents.length === 0) {
+        eventsContainer.innerHTML = `<div class="no-events">
+          <img src="/images/NoEventsShowcase.png" alt="No Events" />
+          <p>No upcoming events at the moment.</p>
+        </div>`;
+        updatePaginationButtons();
+        return;
+      }
+
+      eventsContainer.innerHTML = currentEvents.map(event => `
+        <div class="event-card">
+          <img src="${event.image_url || '/images/WhiteSpace.png'}" alt="${event.title}" class="event-image" onerror="this.src='/images/WhiteSpace.png'">
+          <div class="event-content">
+            <h3 class="event-title">${event.title}</h3>
+            <div class="event-meta"><i class="fas fa-calendar"></i> ${formatDate(event.date)}</div>
+            <div class="event-meta"><i class="fas fa-clock"></i> ${event.time}</div>
+            <div class="event-meta"><i class="fas fa-map-marker-alt"></i> ${event.location}</div>
+          </div>
+        </div>
+      `).join('');
+
+      updatePaginationButtons();
+    }
+
+    function formatDate(dateString) {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: '2-digit'
+      });
+    }
+
+    function updatePaginationButtons() {
+      const totalPages = Math.ceil(eventsData.length / eventsPerPage);
+      const prevBtn = document.getElementById('prevBtn');
+      const nextBtn = document.getElementById('nextBtn');
+      const pageInfo = document.getElementById('pageInfo');
+
+      prevBtn.disabled = currentPage === 1;
+      nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+
+      if (totalPages > 0) {
+        pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+      } else {
+        pageInfo.textContent = 'No events';
+      }
+    }
+
+    document.getElementById('prevBtn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        displayEvents();
+      }
+    });
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      const totalPages = Math.ceil(eventsData.length / eventsPerPage);
+      if (currentPage < totalPages) {
+        currentPage++;
+        displayEvents();
+      }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      fetch('/api/auth/verify', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.user) {
+          window.location.href = '/login';
+          return;
+        }
+        
+        if (isAdminRole(data.user.role)) {
+          initializeNavbar('admin', 'home', data.user.role);
+        } else if (data.user.role === 'student' || data.user.role === 'external') {
+          initializeNavbar('user', 'home', data.user.role, data.user.username);
+        } else {
+          window.location.href = '/login';
+        }
+
+        fetchEvents();
+      })
+      .catch(error => {
+        window.location.href = '/login';
+      });
+    });
+  </script>
+
+  <script src="/js/roleUtils.js"></script>
+  <script src="/utils/navbar.js"></script>
+  <script src="/utils/footer.js"></script>
+</body>
+</html>

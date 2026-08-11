@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>My Forms - UC FMO</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/utils/navbar.css">
+    <link rel="stylesheet" href="/utils/modals.css">
+    <link rel="stylesheet" href="/css/components/modern-filter.css">
+    <style>
+        body {
+            background-color: var(--green-50);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+        }
+        .container {
+            flex: 1;
+        }
+        .forms-header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .forms-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .forms-header h1 {
+            font-size: var(--font-size-3xl);
+            margin: 0 0 var(--spacing-sm);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .forms-header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: var(--font-size-base);
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quick-actions {
+            text-align: right;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .form-card {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            padding: var(--spacing-lg);
+            transition: all var(--transition-base);
+            border-left: 4px solid var(--green-700);
+            margin-bottom: var(--spacing-md);
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+
+        .form-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .form-card.campus {
+            border-left-color: var(--green-700);
+        }
+        .form-card.internal {
+            border-left-color: var(--info);
+        }
+        .form-card.external {
+            border-left-color: var(--warning);
+        }
+
+        .form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-title {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            font-size: var(--font-size-lg);
+            font-weight: 600;
+            color: var(--gray-800);
+            margin: 0;
+        }
+
+        .form-type-badge {
+            background: var(--success-bg);
+            color: var(--success);
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-xs);
+            font-weight: 600;
+        }
+
+        .form-type-badge.internal {
+            background: var(--info-bg);
+            color: var(--info);
+        }
+        .form-type-badge.external {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .form-details {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .form-detail {
+            display: flex;
+            margin-bottom: var(--spacing-xs);
+            font-size: var(--font-size-sm);
+        }
+
+        .form-detail strong {
+            min-width: 130px;
+            color: var(--gray-600);
+        }
+
+        .form-detail span {
+            color: var(--gray-800);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--gray-300);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .page-header {
+            display: none;
+        }
+
+        .filters {
+            display: none;
+        }
+
+        .forms-grid {
+            display: grid;
+            gap: var(--spacing-lg);
+        }
+
+        .footer {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .forms-header {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            .forms-header h1 {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="container">
+        <div class="forms-header">
+            <h1><i class="fas fa-file-alt"></i> My Forms</h1>
+            <p>View and manage all your submitted forms (SARF, Internal Client, External Client)</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-grid" id="statsCards">
+            <div class="stat-card">
+                <div class="stat-number" id="totalForms">0</div>
+                <div class="stat-label">Total Forms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingForms">0</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="acceptedForms">0</div>
+                <div class="stat-label">Accepted</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="rejectedForms">0</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+        </div>
+
+        <!-- Modern Filter Component -->
+        <div id="modernFilter"></div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <a href="/user/reservation" class="btn btn-primary">
+                <i class="fas fa-plus"></i> Create New Form
+            </a>
+        </div>
+
+        <div id="formsContainer">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading your forms...</p>
+            </div>
+        </div>
+
+        <div id="pagination" class="pagination" style="display: none;"></div>
+    </div>
+
+    <script>
+        let formsManager;
+        let modernFilter;
+
+        function initializePage() {
+            formsManager = new FormsManager({
+                    apiEndpoint: '/api/sarf/my-all-forms',
+                isAdmin: false,
+                containerId: 'formsContainer',
+                paginationId: 'pagination',
+                statsEnabled: true
+            });
+
+            modernFilter = new ModernFilter('modernFilter', {
+                showSearch: true,
+                showStatus: true,
+                showType: true,
+                showDateRange: false,
+                placeholder: 'Search your forms...',
+                onFilter: (filters) => {
+                    formsManager.applyFilters(filters);
+                },
+                onClear: () => {
+                    formsManager.applyFilters({});
+                }
+            });
+
+            formsManager.updateStats();
+            formsManager.loadForms();
+        }
+
+        function previewPDF(pdfUrl) {
+            window.open(pdfUrl, '_blank');
+        }
+
+        async function downloadFormPDF(formId, formType) {
+            try {
+                const token = localStorage.getItem('token');
+                let downloadUrl = '';
+
+                if (formType === 'campus') {
+                    downloadUrl = `/api/sarf/download/${formId}`;
+                } else if (formType === 'internal') {
+                    downloadUrl = `/api/sarf/internal/download/${formId}`;
+                } else if (formType === 'external') {
+                    downloadUrl = `/api/sarf/external/download/${formId}`;
+                }
+
+                const response = await fetch(downloadUrl, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${formType.toUpperCase()}-Form-${formId}.pdf`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    const error = await response.json();
+                    alert('Error downloading PDF: ' + error.message);
+                }
+            } catch (error) {
+                console.error('Error downloading PDF:', error);
+                alert('Failed to download PDF. Please try again.');
+            }
+        }
+
+        function refreshMyForms() {
+            if (window.formsManager) {
+                window.formsManager.updateStats();
+                window.formsManager.loadForms();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/login';
+                return;
+            }
+
+            fetch('/api/auth/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.user) {
+                    window.location.href = '/login';
+                    return;
+                }
+
+                if (['admin', 'student', 'external'].includes(data.user.role)) {
+                    initializeNavbar('user', 'my-forms', data.user.role, data.user.username);
+                    initializePage();
+                } else {
+                    window.location.href = '/login';
+                }
+            })
+            .catch(error => {
+                window.location.href = '/login';
+            });
+
+            // Listen for form submission refresh signals
+            window.addEventListener('storage', (event) => {
+                if (event.key === 'requestFormsNeedsRefresh') {
+                    refreshMyForms();
+                }
+            });
+
+            window.addEventListener('focus', () => {
+                if (localStorage.getItem('requestFormsNeedsRefresh')) {
+                    refreshMyForms();
+                    localStorage.removeItem('requestFormsNeedsRefresh');
+                }
+            });
+
+            window.addEventListener('my-forms-refresh', () => {
+                refreshMyForms();
+            });
+        });
+    </script>
+    <script src="/utils/navbar.js"></script>
+    <script src="/utils/modals.js"></script>
+    <script src="/js/components/modern-filter.js"></script>
+    <script src="/js/utils/forms-manager.js?v=8"></script>
+</body>
+</html>

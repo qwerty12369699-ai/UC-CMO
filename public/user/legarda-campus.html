@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UC Campus - Legarda Campus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/utils/navbar.css">
+  <link rel="stylesheet" href="/utils/footer.css">
+  <style>
+    .campus-page {
+      background-color: var(--green-50);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .campus-hero {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl) var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .campus-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .campus-hero h1 {
+      font-size: var(--font-size-3xl);
+      margin: 0 0 var(--spacing-xs);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .campus-hero p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: var(--font-size-base);
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .campus-image-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .campus-image-card img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .facilities-section h2 {
+      color: var(--green-900);
+      font-size: var(--font-size-2xl);
+      text-align: center;
+      margin: 0 0 var(--spacing-lg);
+      font-weight: 700;
+    }
+
+    .facility-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+    }
+
+    .facility-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid rgba(46, 125, 50, 0.12);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+
+    .facility-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      background: var(--green-50);
+    }
+
+    .facility-card .facility-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto var(--spacing-sm);
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--green-700);
+      font-size: 1.4rem;
+    }
+
+    .facility-card h3 {
+      color: var(--green-800);
+      font-size: var(--font-size-base);
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 600px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .modal-body {
+      padding: var(--spacing-xl);
+    }
+
+    .modal-body h2 {
+      color: var(--green-900);
+      font-size: var(--font-size-2xl);
+      margin: 0 0 var(--spacing-lg);
+    }
+
+    .modal-details {
+      display: grid;
+      gap: var(--spacing-sm);
+    }
+
+    .modal-detail {
+      display: flex;
+      gap: var(--spacing-sm);
+      font-size: var(--font-size-sm);
+      color: var(--gray-700);
+    }
+
+    .modal-detail strong {
+      min-width: 140px;
+      color: var(--gray-800);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: opacity var(--transition-fast);
+    }
+
+    .close-btn:hover {
+      opacity: 0.8;
+    }
+
+    .modal-image-wrapper {
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .campus-hero h1 {
+        font-size: var(--font-size-2xl);
+      }
+      .campus-image-card img {
+        height: 250px;
+      }
+      .facility-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .modal-content {
+        margin: 10% auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .facility-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="campus-page">
+    <div class="container">
+      <div class="campus-hero">
+        <h1><i class="fas fa-university"></i> Legarda Campus</h1>
+        <p>Legarda Rd, Baguio City</p>
+      </div>
+
+      <div class="campus-image-card">
+        <img src="https://upload.wikimedia.org/wikipedia/en/f/fd/UC-BCF_Legarda.jpg" alt="Legarda Campus">
+      </div>
+
+      <section class="facilities-section">
+        <h2><i class="fas fa-door-open"></i> Select a Facility</h2>
+        <div class="facility-grid">
+          <div class="facility-card" onclick="openModal('AVR')">
+            <div class="facility-icon"><i class="fas fa-video"></i></div>
+            <h3>AVR</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Crime Lab')">
+            <div class="facility-icon"><i class="fas fa-search"></i></div>
+            <h3>Crime Lab</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Deftac')">
+            <div class="facility-icon"><i class="fas fa-shield-alt"></i></div>
+            <h3>Deftac</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Lecture')">
+            <div class="facility-icon"><i class="fas fa-chalkboard-teacher"></i></div>
+            <h3>Lecture Room</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Moot Court')">
+            <div class="facility-icon"><i class="fas fa-gavel"></i></div>
+            <h3>Moot Court</h3>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="facilityModal" class="modal" onclick="if(event.target === this) closeModal()">
+      <div class="modal-content">
+        <div class="modal-image-wrapper">
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+          <img id="facilityImage" src="" alt="Facility Image" class="modal-image" />
+        </div>
+        <div class="modal-body">
+          <h2 id="facilityTitle">Facility Name</h2>
+          <div class="modal-details">
+            <div class="modal-detail"><strong>Floor:</strong> <span id="floor"></span></div>
+            <div class="modal-detail"><strong>Room:</strong> <span id="room"></span></div>
+            <div class="modal-detail"><strong>Max Capacity:</strong> <span id="capacity"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .home, .main, .main-image, .reservation-options, .option-card, .close {
+      display: none;
+    }
+  </style>
+
+  <script>
+    const facilityData = {
+      "AVR": {
+        image: "https://3.imimg.com/data3/BD/VT/MY-14504247/audio-visual-room-500x500.png",
+        floor: "2nd Floor",
+        room: "L43",
+        capacity: "45",
+      },
+      "Crime Lab": {
+        image: "https://crimelabdesign.com/wp-content/uploads/2019/02/Title-5.jpg",
+        floor: "2nd, 3rd Floor",
+        room: "L35, L50, L52",
+        capacity: "45",
+      },
+      "Deftac": {
+        image: "https://yolobjj.wordpress.com/wp-content/uploads/2016/04/img_0866.jpg",
+        floor: "2nd Basement",
+        room: "L13",
+        capacity: "45-50",
+      },
+      "Lecture": {
+        image: "https://live.staticflickr.com/8546/8749462352_8ec0e14bae_h.jpg",
+        floor: "1st, 3rd Floor",
+        room: "L34, L51, L54, L55",
+        capacity: "45",
+      },
+      "Moot Court": {
+        image: "https://www.bennett.edu.in/wp-content/uploads/2023/04/Moot-Court.png",
+        floor: "2nd Basement",
+        room: "L12",
+        capacity: "45",
+      },
+    };
+
+    function openModal(facility) {
+      const data = facilityData[facility];
+      if (!data) return;
+      
+      document.getElementById("facilityTitle").innerText = facility;
+      document.getElementById("facilityImage").src = data.image || '';
+      document.getElementById("floor").innerText = data.floor || 'N/A';
+      document.getElementById("room").innerText = data.room || 'N/A';
+      document.getElementById("capacity").innerText = data.capacity || 'N/A';
+      document.getElementById("facilityModal").style.display = "block";
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById("facilityModal").style.display = "none";
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      fetch('/api/auth/verify', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.user) {
+          window.location.href = '/login';
+          return;
+        }
+
+        if (isAdminRole(data.user.role)) {
+          initializeNavbar('admin', 'campus', data.user.role);
+        } else if (data.user.role === 'student' || data.user.role === 'external') {
+          initializeNavbar('user', 'campus', data.user.role, data.user.username);
+        } else {
+          window.location.href = '/login';
+        }
+      })
+      .catch(error => {
+        window.location.href = '/login';
+      });
+    });
+  </script>
+  <script src="/js/roleUtils.js"></script>
+  <script src="/utils/navbar.js"></script>
+  <script src="/utils/footer.js"></script>
+</body>
+</html>

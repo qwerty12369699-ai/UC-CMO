@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UC Campus - Admin Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/utils/navbar.css?v=2">
+    <link rel="stylesheet" href="/utils/footer.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <style>
+        /* Dashboard-specific styles */
+        .dashboard-header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dashboard-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .dashboard-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 50%;
+        }
+
+        .dashboard-header h1 {
+            font-size: var(--font-size-3xl);
+            margin: 0 0 var(--spacing-sm);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .dashboard-header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: var(--font-size-base);
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            display: none;
+        }
+        .main-content.show {
+            display: block;
+        }
+
+        .auth-error-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: rgba(15, 23, 42, 0.9);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-2xl);
+            text-align: center;
+        }
+
+        .auth-error-overlay .overlay-box {
+            max-width: 540px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-xl);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28);
+        }
+
+        .auth-error-overlay h3,
+        .auth-error-overlay p {
+            color: #ffffff;
+        }
+
+        .stats-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .dashboard-status-message {
+            display: none;
+            margin-bottom: var(--spacing-lg);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            background: rgba(244, 67, 54, 0.08);
+            color: var(--danger);
+            border: 1px solid rgba(244, 67, 54, 0.2);
+        }
+
+        /* Post styles - kept for functionality, restyled */
+        .post-feed {
+            margin-top: var(--spacing-lg);
+        }
+
+        .post {
+            background-color: #fff;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-md);
+            padding: var(--spacing-lg);
+            border: 1px solid rgba(46, 125, 50, 0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .post-user {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .profile-pic {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info span {
+            font-weight: 600;
+            font-size: var(--font-size-sm);
+            color: var(--gray-800);
+        }
+
+        .post-user-info small {
+            display: block;
+            color: var(--gray-500);
+            font-size: var(--font-size-xs);
+        }
+
+        .delete-post {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: color var(--transition-fast);
+        }
+
+        .delete-post:hover {
+            color: var(--danger);
+        }
+
+        .post-content h3 {
+            margin: 0 0 var(--spacing-sm);
+            font-size: var(--font-size-lg);
+            color: var(--gray-800);
+        }
+
+        .post-content p {
+            margin: 0 0 var(--spacing-md);
+            font-size: var(--font-size-sm);
+            color: var(--gray-600);
+            line-height: 1.6;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            border-radius: var(--radius-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .post-interactions {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .like-btn, .comment-toggle {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            border: none;
+            padding: 8px 14px;
+            font-size: var(--font-size-sm);
+            cursor: pointer;
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .like-btn:hover, .comment-toggle:hover {
+            background: var(--green-50);
+            color: var(--green-700);
+        }
+
+        .like-btn.liked {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .comments-section {
+            margin-top: var(--spacing-md);
+            padding-top: var(--spacing-md);
+            border-top: 1px solid var(--gray-200);
+        }
+
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-sm);
+            padding: var(--spacing-sm);
+            background: var(--gray-100);
+            border-radius: var(--radius-sm);
+        }
+
+        .comment-profile-pic {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comment-content strong {
+            font-size: var(--font-size-sm);
+            color: var(--gray-800);
+        }
+
+        .comment-content p {
+            margin: 2px 0;
+            font-size: var(--font-size-xs);
+            color: var(--gray-600);
+        }
+
+        .delete-comment {
+            background: transparent;
+            border: none;
+            font-size: var(--font-size-xs);
+            color: var(--danger);
+            cursor: pointer;
+        }
+
+        .comment-input {
+            display: flex;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .comment-text {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: var(--radius-sm);
+            font-size: var(--font-size-sm);
+        }
+
+        .submit-comment {
+            background: var(--green-700);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: var(--font-size-sm);
+            transition: background var(--transition-fast);
+        }
+
+        .submit-comment:hover {
+            background: var(--green-800);
+        }
+
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-sm);
+            margin-top: var(--spacing-sm);
+        }
+
+        .tag {
+            background: var(--green-50);
+            color: var(--green-700);
+            border-radius: var(--radius-full);
+            padding: 4px 12px;
+            font-size: var(--font-size-xs);
+            border: 1px solid var(--green-200);
+        }
+
+        .post-container {
+            margin-bottom: var(--spacing-md);
+        }
+
+        .admin-header-card {
+            display: none;
+        }
+
+        .explore-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+        }
+
+        /* Progress bar styles for rankings */
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--gray-200);
+            border-radius: var(--radius-full);
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--green-600), var(--green-400));
+            border-radius: var(--radius-full);
+            transition: width 0.6s ease;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            .dashboard-header h1 {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Auth Error Overlay -->
+    <div id="auth-error" class="auth-error-overlay">
+        <div class="overlay-box">
+            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: var(--spacing-md);"></i>
+            <h3>Authentication Required</h3>
+            <p>You need to be logged in as an admin to access this page.</p>
+            <button class="btn btn-primary" onclick="window.location.href='/login'">Go to Login</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Navbar Container -->
+        <div id="navbar-container"></div>
+
+        <div class="container">
+            <!-- Dashboard Hero Header -->
+            <div class="dashboard-header">
+                <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+                <p>Monitor campus reservations, events, and administrative metrics in one place.</p>
+            </div>
+
+            <div class="stats-actions">
+                <button id="refreshStatsBtn" class="btn btn-secondary">Refresh Stats</button>
+            </div>
+
+            <div id="dashboardStatus" class="dashboard-status-message" aria-live="polite"></div>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
+                    <div class="stat-number" id="total-reservations">0</div>
+                    <div class="stat-label">Total Reservations</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-star"></i></div>
+                    <div class="stat-number" id="top-reservation-type">N/A</div>
+                    <div class="stat-label">Most Selected Type</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
+                    <div class="stat-number" id="total-clients">0</div>
+                    <div class="stat-label">Total Clients</div>
+                </div>
+            </div>
+
+            <!-- Rankings Grid -->
+            <div class="rankings-grid">
+                <div class="ranking-box">
+                    <h2><i class="fas fa-trophy"></i> Reservation Rankings</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Element</th>
+                                    <th>Usage</th>
+                                    <th>Distribution</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reservationRankingsBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--gray-400);">No data available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="ranking-box">
+                    <h2><i class="fas fa-user-tie"></i> Top Clients</h2>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Rank</th>
+                                    <th>Client</th>
+                                    <th>Usage</th>
+                                    <th>Distribution</th>
+                                </tr>
+                            </thead>
+                            <tbody id="clientRankingsBody">
+                                <tr>
+                                    <td colspan="4" style="text-align: center; color: var(--gray-400);">No data available</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="charts-row">
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-pie"></i> Reservation Distribution</h3>
+                    <canvas id="cultureChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3><i class="fas fa-chart-bar"></i> Client Distribution</h3>
+                    <canvas id="stylesChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/roleUtils.js"></script>
+    <script src="/js/auth.js"></script>
+    <script>
+        // Get token from URL parameters or localStorage
+        function getToken() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token') || localStorage.getItem('token');
+
+            if (urlParams.has('token')) {
+                localStorage.setItem('token', token);
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+
+            return token;
+        }
+
+        // Immediately check authentication when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            try {
+                const token = getToken();
+
+                if (!token) {
+                    throw new Error('No authentication token found');
+                }
+
+                const response = await fetch('/api/auth/admin/verify', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    const data = await response.json().catch(() => ({}));
+                    throw new Error(data.message || 'Authentication failed');
+                }
+
+                const data = await response.json();
+
+                if (!data.user || !isAdminRole(data.user.role)) {
+                    throw new Error('Insufficient privileges');
+                }
+
+                initializeNavbar('admin', 'dashboard', data.user.role);
+
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.classList.add('show');
+                }
+                const authErrorOverlay = document.getElementById('auth-error');
+                if (authErrorOverlay) {
+                    authErrorOverlay.style.display = 'none';
+                }
+
+                await loadDashboardStats();
+            } catch (error) {
+                const authErrorOverlay = document.getElementById('auth-error');
+                if (authErrorOverlay) {
+                    authErrorOverlay.style.display = 'flex';
+                }
+                if (error && error.message && error.message.toLowerCase().includes('token')) {
+                    localStorage.removeItem('token');
+                }
+                console.error('Authentication error:', error);
+            }
+        });
+
+        async function loadDashboardStats() {
+            const statusMessage = document.getElementById('dashboardStatus');
+            if (statusMessage) {
+                statusMessage.style.display = 'none';
+                statusMessage.textContent = '';
+            }
+
+            try {
+                const token = getToken();
+                const response = await fetch('/api/admin/stats', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch dashboard stats');
+                }
+
+                const stats = await response.json();
+                const totalReservations = stats.totalReservations || 0;
+                const topReservationType = stats.topReservationType || 'N/A';
+                const totalClients = stats.totalClients || 0;
+
+                document.getElementById('total-reservations').textContent = totalReservations;
+                document.getElementById('top-reservation-type').textContent = topReservationType;
+                document.getElementById('total-clients').textContent = totalClients;
+
+                const rankingsBody = document.getElementById('reservationRankingsBody');
+                const reservationData = Array.isArray(stats.reservationsByType) ? stats.reservationsByType : [];
+                if (reservationData.length > 0) {
+                    const sorted = [...reservationData].sort((a, b) => (b.count || 0) - (a.count || 0));
+                    const maxCount = sorted[0].count || 1;
+                    rankingsBody.innerHTML = sorted.map((item, i) => `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${item.type || item.label || 'N/A'}</td>
+                            <td>${item.count || 0}</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${Math.round(((item.count || 0) / maxCount) * 100)}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    rankingsBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gray-400);">No data available</td></tr>';
+                }
+
+                const clientBody = document.getElementById('clientRankingsBody');
+                const clientData = Array.isArray(stats.clientDistribution) ? stats.clientDistribution : [];
+                if (clientData.length > 0) {
+                    const sorted = [...clientData].sort((a, b) => (b.count || 0) - (a.count || 0));
+                    const maxCount = sorted[0].count || 1;
+                    clientBody.innerHTML = sorted.map((item, i) => `
+                        <tr>
+                            <td>${i + 1}</td>
+                            <td>${item.name || 'Unknown'}</td>
+                            <td>${item.count || 0}</td>
+                            <td>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: ${Math.round(((item.count || 0) / maxCount) * 100)}%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                } else {
+                    clientBody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--gray-400);">No data available</td></tr>';
+                }
+
+                renderReservationDistributionChart(reservationData);
+                renderClientDistributionChart(clientData);
+            } catch (error) {
+                document.getElementById('total-reservations').textContent = '0';
+                document.getElementById('top-reservation-type').textContent = 'N/A';
+                document.getElementById('total-clients').textContent = '0';
+                if (statusMessage) {
+                    statusMessage.textContent = 'Unable to load dashboard data. Please try again later.';
+                    statusMessage.style.display = 'block';
+                }
+                console.error('Error loading dashboard stats:', error);
+            }
+        }
+
+        let cultureChart = null;
+        let stylesChart = null;
+
+        function renderReservationDistributionChart(data) {
+            const canvas = document.getElementById('cultureChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            const ctx = canvas.getContext('2d');
+            if (cultureChart) cultureChart.destroy();
+
+            const labels = data.map(d => d.type || d.label || 'N/A');
+            const counts = data.map(d => d.count || d.value || 0);
+
+            cultureChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: labels.length ? labels : ['No Data'],
+                    datasets: [{
+                        data: counts.length ? counts : [1],
+                        backgroundColor: ['#2e7d32', '#66bb6a', '#a5d6a7', '#c8e6c9', '#e8f5e9'],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
+        }
+
+        function renderClientDistributionChart(data) {
+            const canvas = document.getElementById('stylesChart');
+            if (!canvas || typeof Chart === 'undefined') return;
+            const ctx = canvas.getContext('2d');
+            if (stylesChart) stylesChart.destroy();
+
+            const labels = data.map(d => d.name || 'Unknown');
+            const counts = data.map(d => d.count || d.value || 0);
+
+            stylesChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels.length ? labels : ['No Data'],
+                    datasets: [{
+                        label: 'Reservations',
+                        data: counts.length ? counts : [0],
+                        backgroundColor: '#2e7d32',
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { stepSize: 1 } }
+                    }
+                }
+            });
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('token');
+            window.location.href = '/login';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const refreshBtn = document.getElementById('refreshStatsBtn');
+            if (refreshBtn) {
+                refreshBtn.addEventListener('click', async () => {
+                    refreshBtn.disabled = true;
+                    refreshBtn.textContent = 'Refreshing...';
+                    await loadDashboardStats();
+                    refreshBtn.disabled = false;
+                    refreshBtn.textContent = 'Refresh Stats';
+                });
+            }
+        });
+      </script>
+    <script src="/utils/navbar.js"></script>
+    <script src="/utils/footer.js"></script>
+</body>
+</html>

@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UC Campus - Main Campus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="/css/design-system.css">
+  <link rel="stylesheet" href="/utils/navbar.css">
+  <link rel="stylesheet" href="/utils/footer.css">
+  <style>
+    .campus-page {
+      background-color: var(--green-50);
+      min-height: 100vh;
+      padding-bottom: 40px;
+    }
+
+    .campus-hero {
+      background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+      color: white;
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-2xl) var(--spacing-xl);
+      margin-bottom: var(--spacing-xl);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .campus-hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+    }
+
+    .campus-hero h1 {
+      font-size: var(--font-size-3xl);
+      margin: 0 0 var(--spacing-xs);
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
+    }
+
+    .campus-hero p {
+      color: rgba(255, 255, 255, 0.85);
+      font-size: var(--font-size-base);
+      margin: 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .campus-image-card {
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .campus-image-card img {
+      width: 100%;
+      height: 400px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .facilities-section h2 {
+      color: var(--green-900);
+      font-size: var(--font-size-2xl);
+      text-align: center;
+      margin: 0 0 var(--spacing-lg);
+      font-weight: 700;
+    }
+
+    .facility-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--spacing-md);
+    }
+
+    .facility-card {
+      background: white;
+      border-radius: var(--radius-md);
+      padding: var(--spacing-lg);
+      text-align: center;
+      cursor: pointer;
+      border: 1px solid rgba(46, 125, 50, 0.12);
+      box-shadow: var(--shadow-sm);
+      transition: all var(--transition-base);
+    }
+
+    .facility-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-md);
+      background: var(--green-50);
+    }
+
+    .facility-card .facility-icon {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto var(--spacing-sm);
+      display: grid;
+      place-items: center;
+      border-radius: var(--radius-md);
+      background: rgba(46, 125, 50, 0.1);
+      color: var(--green-700);
+      font-size: 1.4rem;
+    }
+
+    .facility-card h3 {
+      color: var(--green-800);
+      font-size: var(--font-size-base);
+      margin: 0;
+      font-weight: 600;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-content {
+      background: white;
+      margin: 5% auto;
+      padding: 0;
+      border-radius: var(--radius-lg);
+      width: 90%;
+      max-width: 600px;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .modal-image {
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+    }
+
+    .modal-body {
+      padding: var(--spacing-xl);
+    }
+
+    .modal-body h2 {
+      color: var(--green-900);
+      font-size: var(--font-size-2xl);
+      margin: 0 0 var(--spacing-lg);
+    }
+
+    .modal-details {
+      display: grid;
+      gap: var(--spacing-sm);
+    }
+
+    .modal-detail {
+      display: flex;
+      gap: var(--spacing-sm);
+      font-size: var(--font-size-sm);
+      color: var(--gray-700);
+    }
+
+    .modal-detail strong {
+      min-width: 140px;
+      color: var(--gray-800);
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 20px;
+      font-size: 28px;
+      color: white;
+      cursor: pointer;
+      background: none;
+      border: none;
+      z-index: 2;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+      transition: opacity var(--transition-fast);
+    }
+
+    .close-btn:hover {
+      opacity: 0.8;
+    }
+
+    .modal-image-wrapper {
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .campus-hero h1 {
+        font-size: var(--font-size-2xl);
+      }
+      .campus-image-card img {
+        height: 250px;
+      }
+      .facility-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .modal-content {
+        margin: 10% auto;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .facility-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="navbar-container"></div>
+
+  <main class="campus-page">
+    <div class="container">
+      <div class="campus-hero">
+        <h1><i class="fas fa-building"></i> Main Campus</h1>
+        <p>Gov. Pack Rd, Baguio City</p>
+      </div>
+
+      <div class="campus-image-card">
+        <img src="/images/UC-Maincampus.jpg" alt="Main Campus">
+      </div>
+
+      <section class="facilities-section">
+        <h2><i class="fas fa-door-open"></i> Select a Facility</h2>
+        <div class="facility-grid">
+          <div class="facility-card" onclick="openModal('Auditorium')">
+            <div class="facility-icon"><i class="fas fa-theater-masks"></i></div>
+            <h3>Auditorium</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Theater')">
+            <div class="facility-icon"><i class="fas fa-theater-masks"></i></div>
+            <h3>Theater</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Cañao Hall')">
+            <div class="facility-icon"><i class="fas fa-users"></i></div>
+            <h3>Cañao Hall</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Conference Room')">
+            <div class="facility-icon"><i class="fas fa-handshake"></i></div>
+            <h3>Conference Room</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Gymnasium')">
+            <div class="facility-icon"><i class="fas fa-dumbbell"></i></div>
+            <h3>Gymnasium</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Laboratory Room')">
+            <div class="facility-icon"><i class="fas fa-flask"></i></div>
+            <h3>Laboratory Room</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Lecture Room')">
+            <div class="facility-icon"><i class="fas fa-chalkboard"></i></div>
+            <h3>Lecture Room</h3>
+          </div>
+          <div class="facility-card" onclick="openModal('Training Center')">
+            <div class="facility-icon"><i class="fas fa-graduation-cap"></i></div>
+            <h3>Training Center</h3>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Modal -->
+    <div id="facilityModal" class="modal" onclick="if(event.target === this) closeModal()">
+      <div class="modal-content">
+        <div class="modal-image-wrapper">
+          <button class="close-btn" onclick="closeModal()">&times;</button>
+          <img id="facilityImage" src="" alt="Facility Image" class="modal-image" />
+        </div>
+        <div class="modal-body">
+          <h2 id="facilityTitle">Facility Name</h2>
+          <div class="modal-details">
+            <div class="modal-detail"><strong>Building:</strong> <span id="building"></span></div>
+            <div class="modal-detail"><strong>Floor:</strong> <span id="floor"></span></div>
+            <div class="modal-detail"><strong>Rooms:</strong> <span id="room"></span></div>
+            <div class="modal-detail"><strong>Amenities:</strong> <span id="amenities"></span></div>
+            <div class="modal-detail"><strong>Equipment:</strong> <span id="equipment"></span></div>
+            <div class="modal-detail"><strong>Max Capacity:</strong> <span id="capacity"></span></div>
+            <div class="modal-detail"><strong>Possible Events:</strong> <span id="events"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <style>
+    .home, .main, .main-image, .reservation-options, .option-card, .close {
+      display: none;
+    }
+  </style>
+
+  <script>
+    const facilityData = {
+      "Auditorium": {
+        image: "https://pbs.twimg.com/media/D7TGM5xU0AA_UMg?format=jpg&name=large",
+        building: "EDS Building",
+        floor: "9th Floor",
+        amenities: "Monoblock chairs",
+        equipment: "Projector, PA System, Microphone",
+        capacity: "250",
+        events: "Review Center, Institutional Events"
+      },
+      "Cañao Hall": {
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSN77_6EnJ8qcz-kpSj9H8farLq8hCyiXTxDw&s",
+        building: "CHTM Building",
+        floor: "10th Floor",
+        amenities: "Long tables, white monoblock chairs",
+        equipment: "Projector, PA System, Microphone",
+        capacity: "100-150",
+        events: "Laboratory Classes, Meeting, Institutional Events",
+      },
+      "Conference Room": {
+        image: "https://www.oyorooms.com/blog/wp-content/uploads/2018/03/proper-seating-arrangement.jpg",
+        building: "Main Building",
+        floor: "4th Floor",
+        amenities: "Brown Tables, Swivel Chairs",
+        equipment: "Projector",
+        capacity: "20",
+        events: "Meeting, Institutional Events"
+      },
+      "Theater": {
+        image: "/images/UC_Theater.webp",
+        building: "Main Building",
+        floor: "5th Floor",
+        amenities: "Stage lighting, Sound control",
+        equipment: "PA System, Projector, Microphone",
+        capacity: "600",
+        events: "Performances, Ceremonies, Seminars"
+      },
+      "Gymnasium": {
+        image: "https://con.uc-bcf.edu.ph/wp-content/uploads/sites/12/2024/10/Unknown.jpg",
+        building: "Science Building",
+        floor: "3rd Floor",
+        amenities: "Basketball court, Bleachers",
+        equipment: "LED Wall, PA System, Microphones",
+        capacity: "1200",
+        events: "PE Classes, Sports, Graduation"
+      },
+      "Laboratory Room": {
+        image: "https://bigsee.eu/wp-content/uploads/2021/01/naslovna-77.jpg",
+        building: "Main Building, Science Building, EDS Building, BRS Building, CHTM Building, P.E. Building",
+        floor: "Basement to 10th Floor",
+        room: "Computer, Hydro, Physics, Chemistry, Biology, etc.",
+        amenities: "Lab equipment",
+        equipment: "Specialized lab apparatus",
+        capacity: "100",
+        events: "Laboratory classes, Research"
+      },
+      "Lecture Room": {
+        image: "https://www.uc-bcf.edu.ph/assets/images/research/tbi-e20200211.png",
+        building: "Academic Center",
+        floor: "2nd Floor",
+        amenities: "Whiteboard, Chairs",
+        equipment: "Projector, Speakers",
+        capacity: "60",
+        events: "Lectures, Classes",
+      },
+      "Training Center": {
+        image: "https://www.ashrae.org/image%20library/main%20nav/about/new%20hq/website_gowantrainingcenter-800x600.jpg",
+        building: "BRS Building",
+        floor: "4th Floor",
+        amenities: "Brown Tables, Monoblock chairs",
+        equipment: "Projector, PA System",
+        capacity: "35-40",
+        events: "Meeting, Institutional Events"
+      }
+    };
+
+    function openModal(facility) {
+      const data = facilityData[facility];
+      if (!data) return;
+      
+      document.getElementById("facilityTitle").innerText = facility;
+      document.getElementById("facilityImage").src = data.image || '';
+      document.getElementById("building").innerText = data.building || 'N/A';
+      document.getElementById("floor").innerText = data.floor || 'N/A';
+      document.getElementById("room").innerText = data.room || data.rooms || 'N/A';
+      document.getElementById("amenities").innerText = data.amenities || 'N/A';
+      document.getElementById("equipment").innerText = data.equipment || 'N/A';
+      document.getElementById("capacity").innerText = data.capacity || 'N/A';
+      document.getElementById("events").innerText = data.events || 'N/A';
+      document.getElementById("facilityModal").style.display = "block";
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById("facilityModal").style.display = "none";
+      document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/login';
+        return;
+      }
+
+      fetch('/api/auth/verify', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (!data.user) {
+          window.location.href = '/login';
+          return;
+        }
+
+        if (isAdminRole(data.user.role)) {
+          initializeNavbar('admin', 'campus', data.user.role);
+        } else if (data.user.role === 'student' || data.user.role === 'external') {
+          initializeNavbar('user', 'campus', data.user.role, data.user.username);
+        } else {
+          window.location.href = '/login';
+        }
+      })
+      .catch(error => {
+        window.location.href = '/login';
+      });
+    });
+  </script>
+  <script src="/js/roleUtils.js"></script>
+  <script src="/utils/navbar.js"></script>
+  <script src="/utils/footer.js"></script>
+</body>
+</html>

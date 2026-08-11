@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Curfew Form</title>
+    <style>
+      @page {
+        size: 8.5in 13in;
+        margin-left: 1cm;
+        margin-right: 1cm;
+        margin-top: 1cm;
+        margin-bottom: 1cm;
+      }
+      @media print {
+        .form-page {
+          display: block !important;
+        }
+        .navbar,
+        .footer,
+        .navigation {
+          display: none !important;
+        }
+      }
+      body {
+        font-family: Century Gothic, sans-serif;
+        font-size: 11pt;
+        margin: 0;
+        padding: 0;
+      }
+      .navbar {
+        background-color: #2e7d32; /* dark green */
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        position: relative;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links li a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      .nav-links li a:hover {
+        color: #a5d6a7;
+      }
+      .footer {
+        background-color: #033e2e;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+      }
+      .form-container {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+      }
+      td,
+      th {
+        border: 1px solid black;
+        padding: 5px;
+        vertical-align: top;
+      }
+      .no-border {
+        border: none !important;
+      }
+      .form-title {
+        background-color: #3535354d;
+        text-align: center;
+        font-weight: bold;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        border-radius: 7px;
+      }
+      .two-columns {
+        display: flex;
+        gap: 10px;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .two-columns > div {
+        flex: 1;
+      }
+      .two-columns table {
+        width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .section-title {
+        font-weight: bold;
+        background-color: #747272;
+      }
+      .small {
+        font-size: 10px;
+      }
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .header-row img {
+        height: 40px;
+      }
+      .form-page {
+        display: none;
+      }
+      .form-page.active {
+        display: block;
+      }
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+      button {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+      .outer-border {
+        border: 1px solid black;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      .outer-border td,
+      .outer-border th {
+        border: none;
+        padding: 8px;
+      }
+      .full-form {
+        max-width: 100%;
+        margin: auto;
+        font-family: system-ui, sans-serif;
+        background-color: #f5f8f5;
+        color: #1f1f1f;
+        padding: 2rem;
+        border-radius: 8px;
+      }
+
+      .full-form label {
+        display: block;
+        margin-bottom: 1.25rem;
+        color: #2a4d2e;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .full-form input,
+      .full-form select,
+      .full-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+        box-sizing: border-box;
+        color: #1a1a1a;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .full-form input:focus,
+      .full-form select:focus,
+      .full-form textarea:focus {
+        border-color: #4a7d4a;
+        background-color: #f0f8f1;
+        outline: none;
+      }
+
+      .full-form button {
+        background-color: #4a7d4a;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.2s ease;
+      }
+
+      .full-form button:hover {
+        background-color: #386938;
+      }
+
+      .full-form input[type="checkbox"],
+      .full-form input[type="radio"] {
+        vertical-align: middle;
+        transform: translateY(-1px);
+        margin-right: 0.5rem;
+        width: auto;
+      }
+      .step {
+        display: none;
+        animation: fade 0.25s linear forwards;
+      }
+      .step.active {
+        display: block;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @media screen {
+        #internalForm,
+        #combinedForm {
+          display: none;
+        }
+      }
+      @media print {
+        #userForm {
+          display: none !important;
+        }
+        .form-page,
+        #combinedForm {
+          display: block !important;
+        }
+      }
+      fieldset {
+        border: 1px solid #b6d6bf;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        background-color: #f0f7f0;
+        border-radius: 6px;
+      }
+
+      legend {
+        color: #2d5f2e;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      fieldset label {
+        color: #000000;
+        font-weight: normal;
+        display: inline-block;
+        margin-right: 1.5rem;
+      }
+    </style>
+
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>UC Campus</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <script>
+    function onlyOne(checkbox, groupName) {
+      const groupCheckboxes = document.querySelectorAll(
+        `input[name="${groupName}"]`
+      );
+      groupCheckboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+      });
+    }
+
+    function toggleLongTablesCount(checkbox) {
+      const countBox = document.getElementById("u_long_tables_count");
+      if (checkbox.value === "yes") {
+        countBox.disabled = !checkbox.checked;
+      } else if (checkbox.value === "no" && checkbox.checked) {
+        countBox.disabled = true;
+        countBox.value = "";
+      }
+    }
+  </script>
+
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const venueField = document.getElementById("u_venue");
+    const attendField = document.getElementById("u_people");
+    const maxNote = document.getElementById("attend_max_note");
+
+    const venueOptions = {
+      student: [
+        "Auditorium",
+        "Cañao Hall",
+        "Gymnasium",
+        "Theater",
+        "Field"
+      ],
+      internal: [
+        "Auditorium",
+        "Cañao Hall",
+        "Conference Room",
+        "Gymnasium",
+        "Laboratory Room",
+        "Lecture Room (Main)",
+        "Training Center",
+
+        "AVR",
+        "Crime Lab",
+        "Deftac",
+        "Lecture Room (Legarda)",
+        "Moot Court",
+      ],
+      externalClients: [
+        "Classroom (Already Specified)",
+        "Gymnasium",
+        "Auditorium",
+        "Theater",
+        "G311-G312 - Review Center",
+        "Training Center",
+        "Other(Already Specified)"
+      ]
+    };
+
+    const capacityMap = {
+      "Auditorium": 250,
+      "Cañao Hall": 150,
+      "Conference Room": 20,
+      "Gymnasium": 1200,
+      "Laboratory Room": 100,
+      "Lecture Room (Main)": 60,
+      "Training Center": 40,
+      "AVR": 45,
+      "Crime Lab": 50,
+      "Deftac": 50,
+      "Lecture Room (Legarda)": 45,
+      "Moot Court": 45,
+      "Classroom (Already Specified)": 45,
+      "G311-G312": 100,
+      "Theater": 600,
+      "Training Center": 40,
+    };
+
+    let currentMax = 9999;
+
+    function updateVenueOptions() {
+      const isStudent = document.getElementById("checkbox_student")?.checked;
+      const isInternal = document.getElementById("checkbox_internal")?.checked;
+      const isExternal = document.getElementById("checkbox_list")?.checked;
+
+      venueField.innerHTML = '<option value="">— Select —</option>';
+
+      let venues = [];
+      if (isStudent) venues = venues.concat(venueOptions.student);
+      if (isInternal) venues = venues.concat(venueOptions.internal);
+      if (isExternal) venues = venues.concat(venueOptions.externalClients);
+
+      venues = [...new Set(venues)]; // Remove duplicates
+
+      venues.forEach((venue) => {
+        const opt = document.createElement("option");
+        opt.value = venue;
+        opt.textContent = venue;
+        venueField.appendChild(opt);
+      });
+
+      // Reset attendee field when venue list is refreshed
+      currentMax = 9999;
+      attendField.value = "";
+      attendField.placeholder = "";
+      attendField.removeAttribute("max");
+      if (maxNote) maxNote.textContent = "";
+    }
+
+    // Update attendee limit when venue changes
+    venueField.addEventListener("change", () => {
+      const selected = venueField.value;
+      currentMax = capacityMap[selected] || 9999;
+      attendField.max = currentMax;
+      attendField.placeholder = `Max ${currentMax}`;
+      attendField.title = `Maximum allowed for ${selected}: ${currentMax}`;
+      if (maxNote) maxNote.textContent = `Max: ${currentMax}`;
+    });
+
+    // Warn user if they exceed max attendees
+    attendField.addEventListener("input", () => {
+      const value = parseInt(attendField.value, 10);
+      if (value > currentMax) {
+        alert(`This venue allows only up to ${currentMax} attendees.`);
+        attendField.value = currentMax;
+      }
+    });
+
+    // Trigger update on load and when any checkbox changes
+    updateVenueOptions();
+    document.querySelectorAll("#checkbox_student, #checkbox_internal, #checkbox_list")
+      .forEach(cb => cb.addEventListener("change", updateVenueOptions));
+  });
+</script>
+
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <img
+          alt="UC Logo"
+          src="https://upload.wikimedia.org/wikipedia/commons/8/84/UC_Official_Logo.png"
+          style="height: 75px; width: auto"
+        />
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a class="active" href="/home">Home</a></li>
+        <li><a href="/user/my-forms">My Forms</a></li>
+        <li><a href="/user/reservation">Reservation</a></li>
+      </ul>
+    </nav>
+    <form id="userForm" class="full-form">
+      <div
+        style="
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+          align-items: start;
+          margin-bottom: 2rem;
+        "
+      >
+  <fieldset>
+  <legend><strong>Attachment: Duly accomplished and approved -</strong></legend>
+
+  <label>
+    <input
+      type="checkbox"
+      id="checkbox_student"
+      name="form_type"
+      value="student"
+      data-target="activity_form"
+      onclick="onlyOne(this, 'form_type'); updateVenueOptions()"
+    />
+    Student Activity <br />Request Form *(UC-SDWO-FORM-106)
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      id="checkbox_internal"
+      name="form_type"
+      value="internal"
+      data-target="request_form"
+      onclick="onlyOne(this, 'form_type'); updateVenueOptions()"
+    />
+    Facilities & Service Request Form <br />for Internal Clients (UC-SDWO-FORM-22)
+  </label>
+
+  <label>
+    <input
+      type="checkbox"
+      id="checkbox_list"
+      name="form_type"
+      value="external"
+      data-target="participants_list"
+      onclick="onlyOne(this, 'form_type'); updateVenueOptions()"
+    />
+    * List of Participants
+  </label>
+</fieldset>
+
+  <div>
+    <label>
+  Requesting Office: <br>
+  <input
+    type="text"
+    id="u_requesting_office"
+    name="u_requesting_office"
+    data-target="requesting_office"
+    style="width: 100%" />
+</label>
+
+    <label>
+      Venue:
+      <select id="u_venue" name="u_venue" data-target="venue" style="width: 100%" required>
+    <option value="">— Select —</option>
+  </select>
+    </label>
+
+    <label>
+      Number of People:
+      <input
+            type="number"
+            id="u_people"
+            name="u_people"
+            data-target="people"
+            min="1"
+            required
+            style="width: 100%"
+          />
+          <small id="attend_max_note" style="margin-left: 5px">Max: —</small>
+    </label>
+  </div>
+</div>
+
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+      <label>
+  Date of Request: <br>
+  <input
+    type="date"
+    id="u_form_date"
+    name="u_form_date"
+    data-target="form_date"
+    style="width: 100%" />
+</label>
+
+<label>
+  Title/Nature of Activity: <br>
+  <input
+    type="text"
+    id="u_title"
+    name="u_title"
+    data-target="title"
+    style="width: 100%" />
+</label>
+
+
+</div>
+<div style="display: grid; grid-template-columns: 1fr auto 1fr 1fr; gap: 0.5rem; align-items: end;">
+  <label style="margin-bottom: 0;">
+    <span>Time of Activity:</span>
+    <input
+      type="time"
+      id="u_start_time"
+      name="u_start_time"
+      data-target="activity_time_start"
+      required
+      style="width: 100%"
+    />
+  </label>
+  <span style="text-align: center; align-self: end;">to</span>
+  <label style="margin-bottom: 0;">
+    <input
+      type="time"
+      id="u_end_time"
+      name="u_end_time"
+      data-target="activity_time_end"
+      required
+      style="width: 100%"
+    />
+  </label>
+  <label style="margin-bottom: 0;">
+    <span>Date of Activity:</span>
+    <input
+      type="date"
+      id="u_activity_date"
+      name="u_activity_date"
+      data-target="activity_date"
+      style="width: 100%"
+    />
+  </label>
+</div>
+      
+      <button type="button" id="preparePrint">Submit &amp; Print</button>
+      
+    </form>
+
+    <footer class="footer">
+  © 2025 University of the Cordilleras. All Rights Reserved.
+</footer>
+
+    <form
+      class="form-container"
+      id="combinedForm"
+      onsubmit="event.preventDefault(); window.print();"
+    >
+      <!-- Header Section -->
+      <div class="form-page active">
+        <div class="header-row">
+          <img alt="University of the Cordilleras Logo" src="pending logo" />
+          <div style="text-align: right">
+            <strong>CAMPUS AND FACILITIES MANAGEMENT OFFICE</strong><br />
+          </div>
+        </div>
+
+        <table>
+          <tr>
+            <td>
+              <br />
+              <div style="text-align: center">
+                <strong>REQUEST FOR EXEMPTION FROM CURFEW</strong>
+              </div>
+              <label for="form_date">Date: </label>
+              <input
+                id="form_date"
+                name="form_date"
+                type="date"
+                style="width: 12%"
+              /><br />
+
+              <label for="requesting_office">Requesting Office: </label>
+              <input
+                id="requesting_office"
+                name="requesting_office"
+                type="text"
+                style="width: 15%"
+              />
+
+              <label for="venue">Venue: </label>
+              <input id="venue" name="venue" type="text" style="width: 20%" />
+
+              <label for="people">Number of People: </label>
+              <input
+                id="people"
+                name="people"
+                type="text"
+                style="width: 10%"
+              /><br />
+
+              <label for="title">Title/Nature of Activity: </label>
+              <input
+                id="title"
+                name="title"
+                type="text"
+                style="width: 72%"
+              /><br />
+
+              <label for="activity_date">Date of Activity: </label>
+              <input
+                id="activity_date"
+                name="activity_date"
+                type="date"
+                style="width: 30%"
+              />
+
+              <label for="activity_time">Time of Activity: </label>
+              <input
+                id="activity_time_start"
+                name="activity_time"
+                type="text"
+                style="width: 14%"
+              /><small>to</small>
+              <input
+                id="activity_time_end"
+                name="activity_time"
+                type="text"
+                style="width: 13%"
+              /><br /><br /><br />
+
+              <table style="font-size: 10pt">
+                <tr>
+                  <td colspan="1">Requested by:</td>
+                  <td colspan="1">Noted by:</td>
+                  <td colspan="1">Noted by:</td>
+                </tr>
+                <tr>
+                  <td colspan="1" style="text-align: center; width: 33%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>Personnel in Charge</strong><br />(Name |
+                    Signature | Date)
+                  </td>
+                  <td colspan="1" style="text-align: center; width: 34%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>*Instructor/College Dean</strong><br />(Name |
+                    Signature | Date)
+                  </td>
+                  <td colspan="1" style="text-align: center; width: 33%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>Occupational Safety and Health</strong
+                    ><br />(Name | Signature | Date)
+                  </td>
+                </tr>
+              </table>
+              <div>
+                <strong>Attachment: </strong>Duly accomplished and approved -<br />
+
+                <label>
+                  <input
+                    type="checkbox"
+                    id="activity_form"
+                    name="activity_form"
+                    value="free"
+                  />
+                  Student Activity Request Form *(UC-SDWO-FORM-106)<br />
+                </label>
+
+                <label>
+                  <input
+                    type="checkbox"
+                    id="request_form"
+                    name="request_form"
+                    value="free"
+                  />
+                  Facilities & Service Request Form for Internal Clients
+                  (UC-SDWO-FORM-22)<br />
+                </label>
+
+                <label>
+                  <input
+                    type="checkbox"
+                    id="participants_list"
+                    name="participants_list"
+                    value="free"
+                  />
+                  * List of Participants<br />
+                </label>
+              </div>
+              <table style="font-size: 10pt">
+                <tr>
+                  <td colspan="1">Verified by:</td>
+                  <td colspan="1">Approved by:</td>
+                  <td colspan="1">*Venue Requested by:</td>
+                </tr>
+                <tr>
+                  <td colspan="1" style="text-align: center; width: 33%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>Facilities Admin Staff</strong><br />(Name |
+                    Signature | Date)
+                  </td>
+                  <td colspan="1" style="text-align: center; width: 34%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>*VP for Admin & Students Services</strong
+                    ><br />(Name | Signature | Date)
+                  </td>
+                  <td colspan="1" style="text-align: center; width: 33%">
+                    <br /><br /><br /><strong
+                      >____________________________</strong
+                    >
+                    <br /><strong>CFMO, Director</strong><br />(Name | Signature
+                    | Date)
+                  </td>
+                </tr>
+              </table>
+              <div>
+                <strong>*Note: </strong> Accomplish 3 copies of this form and
+                submit to Campus and Facilities Management Office 2 weeks prior
+                to the date event
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <div>
+          <label>UC-CFMO-FORM-40</label>
+        </div>
+
+        <div class="navigation" style="text-align: center">
+          <button type="submit">Submit</button>
+        </div>
+      </div>
+    </form>
+
+    <script>
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("preparePrint");
+  if (!btn) return;
+
+  btn.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    // Copy all plain inputs and textareas to internal form
+    document
+      .querySelectorAll('[data-target]:not([type="checkbox"]):not([type="radio"])')
+      .forEach(src => {
+        const dst = document.getElementById(src.dataset.target);
+        if (dst) {
+          dst.value = src.value;
+          dst.textContent = src.value;
+        }
+      });
+
+    // Copy checked checkboxes and radio buttons
+    document
+      .querySelectorAll('input[type="checkbox"][data-target], input[type="radio"][data-target]')
+      .forEach(src => {
+        if (!src.checked) return;
+        const name = src.dataset.target;
+        const val = src.dataset.value;
+
+        const dst = val !== undefined
+          ? document.querySelector(`#combinedForm input[name="${name}"][value="${val}"]`)
+          : document.getElementById(name);
+
+        if (dst) dst.checked = true;
+      });
+
+    // Mark curfew as required
+    const flag = document.getElementById("curfew_required");
+    if (flag) flag.value = "Yes";
+
+    window.print();
+  });
+});
+</script>
+
+  </body>
+</html>

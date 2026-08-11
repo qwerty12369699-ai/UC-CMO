@@ -1,0 +1,2692 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>External Clients Registration Form</title>
+    <link rel="stylesheet" href="/utils/modals.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <style>
+      @page {
+        size: 8.5in 13in;
+        margin-left: 1cm;
+        margin-right: 1cm;
+        margin-top: 1cm;
+        margin-bottom: 1cm;
+      }
+      @media print {
+        .form-page {
+          display: block !important;
+        }
+        .navbar,
+        .footer,
+        .navigation {
+          display: none !important;
+        }
+      }
+      body {
+        font-family: Century Gothic, sans-serif;
+        font-size: 11pt;
+        margin: 0;
+        padding: 0;
+      }
+
+      /* Time Conflict Warning Styles */
+      .time-conflict-warning {
+        background: #fff3cd;
+        border: 1px solid #ffeaa7;
+        border-radius: 8px;
+        padding: 1rem;
+        margin: 1rem 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .conflict-message {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #856404;
+        font-weight: 500;
+        margin-bottom: 1rem;
+      }
+
+      .conflict-message i {
+        color: #f39c12;
+        font-size: 1.2rem;
+      }
+
+      .suggested-times h4 {
+        color: #333;
+        margin-bottom: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .time-suggestions-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+
+      .time-suggestion {
+        background: #e8f5e8;
+        border: 1px solid #4caf50;
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        color: #2e7d32;
+      }
+
+      .time-suggestion:hover {
+        background: #4caf50;
+        color: white;
+        transform: translateY(-1px);
+      }
+
+      /* Ensure navbar uses proper font from navbar.css */
+      .navbar,
+      .navbar * {
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+      }
+      .navbar {
+        background-color: #2e7d32; /* dark green */
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 2rem;
+        position: relative;
+      }
+      .nav-links {
+        list-style: none;
+        display: flex;
+        gap: 2rem;
+      }
+
+      .nav-links li a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        font-size: 16px;
+      }
+
+      .nav-links li a:hover {
+        color: #a5d6a7;
+      }
+      .footer {
+        background-color: #033e2e;
+        color: white;
+        text-align: center;
+        padding: 20px;
+        font-size: 14px;
+      }
+      .form-container {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 10px;
+      }
+      td,
+      th {
+        border: 1px solid black;
+        padding: 5px;
+        vertical-align: top;
+      }
+      .no-border {
+        border: none !important;
+      }
+      .form-title {
+        background-color: #3535354d;
+        text-align: center;
+        font-weight: bold;
+        padding: 8px;
+        margin-bottom: 10px;
+        border: 2px solid black;
+        border-radius: 7px;
+      }
+      .two-columns {
+        display: flex;
+        gap: 10px;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      .two-columns > div {
+        flex: 1;
+      }
+      .two-columns table {
+        width: 100%;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      .section-title {
+        font-weight: bold;
+        background-color: #747272;
+      }
+      .small {
+        font-size: 10px;
+      }
+      .header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 4px;
+      }
+      .header-row img {
+        height: 40px;
+      }
+      .form-page {
+        display: none;
+      }
+      .form-page.active {
+        display: block;
+      }
+      .navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+      }
+      button {
+        padding: 6px 12px;
+        font-size: 14px;
+      }
+      .outer-border {
+        border: 1px solid black;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+
+      .outer-border td,
+      .outer-border th {
+        border: none;
+        padding: 8px;
+      }
+
+      .section-divider {
+        border: none;
+        border-top: 2px solid #000;
+        margin: 10px 0 15px 0;
+      }
+      .full-form {
+        max-width: 100%;
+        margin: auto;
+        font-family: system-ui, sans-serif;
+        background-color: #f5f8f5;
+        color: #1f1f1f;
+        padding: 2rem;
+        border-radius: 8px;
+      }
+
+      .full-form label {
+        display: block;
+        margin-bottom: 1.25rem;
+        color: #2a4d2e;
+        font-weight: 600;
+        font-size: 1rem;
+      }
+
+      .full-form input,
+      .full-form select,
+      .full-form textarea {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1rem;
+        margin-top: 0.25rem;
+        box-sizing: border-box;
+        color: #1a1a1a;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+      }
+
+      .full-form input:focus,
+      .full-form select:focus,
+      .full-form textarea:focus {
+        border-color: #4a7d4a;
+        background-color: #f0f8f1;
+        outline: none;
+      }
+
+      .full-form button {
+        background-color: #4a7d4a;
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        font-size: 1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition: background-color 0.2s ease;
+      }
+
+      .full-form button:hover {
+        background-color: #386938;
+      }
+      .full-form input[type="checkbox"],
+      .full-form input[type="radio"] {
+        vertical-align: middle;
+        transform: translateY(-1px);
+        margin-right: 0.5rem;
+        width: auto;
+      }
+
+      .step {
+        display: none;
+        animation: fade 0.25s linear forwards;
+      }
+      .step.active {
+        display: block;
+      }
+
+      @keyframes fade {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+      @media screen {
+        #internalForm,
+        #combinedForm {
+          display: none;
+        }
+      }
+      @media print {
+        #userForm {
+          display: none !important;
+        }
+        .form-page,
+        #combinedForm {
+          display: block !important;
+        }
+        .section-title {
+          background-color: #3535354d;
+          border: 1px solid black;
+        }
+      }
+    </style>
+  </head>
+
+  <script>
+    function onlyOne(checkbox, groupName) {
+      const groupCheckboxes = document.querySelectorAll(
+        `input[name="${groupName}"]`
+      );
+      groupCheckboxes.forEach((cb) => {
+        if (cb !== checkbox) cb.checked = false;
+      });
+    }
+
+    function toggleDependentInput(checkbox) {
+      const ids = (checkbox.dataset.toggleTarget || "")
+        .split(",")
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      if (!ids.length) return;
+      ids.forEach((id) => {
+        const target = document.getElementById(id);
+        if (!target) return;
+
+        if (checkbox.checked) {
+          target.disabled = false;
+        } else {
+          target.disabled = true;
+          if ("value" in target) target.value = "";
+        }
+      });
+    }
+  </script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const attendField = document.getElementById("u_participant");
+      const maxNote = document.getElementById("attend_max_note");
+
+      const capacityMap = {
+        classroom: 45,
+        gym: 1500,
+        auditorium: 250,
+        theater: 600,
+        review_center: 100,
+        training: 40,
+        other_facilities: null,
+      };
+
+      const facilityCheckboxes = document.querySelectorAll(
+        'input[name="u_facility"]'
+      );
+
+      let currentMax = 9999;
+
+      function updateMaxCapacity() {
+        let max = 0;
+
+        facilityCheckboxes.forEach((cb) => {
+          if (cb.checked) {
+            const val = cb.value;
+            if (val === "other_facilities") {
+              const dynamicMax = parseInt(
+                document.getElementById("u_others_max").value,
+                10
+              );
+              if (!isNaN(dynamicMax)) max = Math.max(max, dynamicMax);
+            } else {
+              max = Math.max(max, capacityMap[val] || 0);
+            }
+          }
+        });
+
+        currentMax = max || 9999;
+        attendField.max = currentMax;
+        attendField.placeholder = `Max ${currentMax}`;
+        attendField.title = `Maximum allowed: ${currentMax}`;
+        if (maxNote) maxNote.textContent = `Max: ${currentMax}`;
+      }
+
+      facilityCheckboxes.forEach((cb) => {
+        cb.addEventListener("change", () => {
+          if (cb.dataset.toggleTarget) {
+            const targets = cb.dataset.toggleTarget.split(",");
+            targets.forEach((id) => {
+              const el = document.getElementById(id.trim());
+              if (el) el.disabled = !cb.checked;
+            });
+          }
+
+          updateMaxCapacity();
+        });
+      });
+
+      const othersMax = document.getElementById("u_others_max");
+      if (othersMax) {
+        othersMax.addEventListener("input", () => {
+          if (
+            document.querySelector(
+              'input[name="u_facility"][value="other_facilities"]'
+            ).checked
+          ) {
+            attendField.value = othersMax.value;
+            updateMaxCapacity();
+          }
+        });
+      }
+
+      attendField.addEventListener("input", () => {
+        const val = parseInt(attendField.value, 10);
+        if (val > currentMax) {
+          alert(`This selection allows only up to ${currentMax} attendees.`);
+          attendField.value = currentMax;
+        }
+      });
+    });
+  </script>
+
+  <body>
+    <nav class="navbar">
+      <div class="logo">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/8/84/UC_Official_Logo.png"
+          alt="UC Logo"
+          style="height: 75px; width: auto"
+        />
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="/home" class="active">Home</a></li>
+        <li><a href="/user/my-forms">My Forms</a></li>
+        <li><a href="/user/reservation">Reservation</a></li>
+      </ul>
+    </nav>
+
+    <form id="userForm" class="full-form">
+      <div style="text-align: center; margin-bottom: 1rem;">
+        <h2>External Clients Request Form</h2>
+        <small
+          style="
+            display: block;
+            margin-top: 0.25rem;
+            color: #0f0f0f;
+            font-size: 0.75rem;
+            line-height: 1.2;
+          "
+        >
+          NOTE: Submit two (2) copies of this form at least two (2) weeks prior
+          to your event.
+        </small>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+        <label>
+          Name of Agency/Organization:
+          <input
+            type="text"
+            id="u_organization_name"
+            name="u_organization_name"
+            data-target="organization_name"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Contact Person:
+          <input
+            type="text"
+            id="u_contact_person"
+            name="u_contact_person"
+            data-target="contact_person"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Contact No.:
+          <input
+            type="tel"
+            id="u_contact_number"
+            name="u_contact_number"
+            data-target="contact_number"
+            inputmode="numeric"
+            pattern="[0-9]*"
+            oninput="this.value = this.value.replace(/\D/g, '')"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Address of Agency/Organization:
+          <input
+            type="text"
+            id="u_agency_org"
+            name="u_agency_org"
+            data-target="agency_org"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Title/Theme of Activity:
+          <input
+            type="text"
+            id="u_title_theme"
+            name="u_title_theme"
+            data-target="title_theme"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Purpose of Activity:
+          <input
+            type="text"
+            id="u_purpose"
+            name="u_purpose"
+            data-target="purpose"
+            style="width: 100%"
+          />
+        </label>
+      </div>
+      <br />
+      <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem">
+        <label>
+          Date being reserved:
+          <input
+            type="date"
+            id="u_reserve_date"
+            name="u_reserve_date"
+            data-target="reserve_date"
+            style="width: 100%; background-color: #f0f0f0; cursor: not-allowed;"
+            readonly
+          />
+          <small style="color: #666; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+            Date selected from reservation calendar
+          </small>
+        </label>
+
+        <label>
+          Time Start:
+          <input
+            type="time"
+            id="u_time_start"
+            name="u_time_start"
+            data-target="time_start"
+            style="width: 100%"
+          />
+        </label>
+
+        <label>
+          Time End:
+          <input
+            type="time"
+            id="u_time_end"
+            name="u_time_end"
+            data-target="time_end"
+            style="width: 100%"
+          /> </label
+        ><br />
+      </div>
+
+      <!-- Time Conflict Warning and Suggestions -->
+      <div id="time-conflict-warning" class="time-conflict-warning" style="display: none;">
+        <div class="conflict-message">
+          <i class="fas fa-exclamation-triangle"></i>
+          <span>Time conflict detected! The selected time overlaps with existing reservations.</span>
+        </div>
+        <div id="suggested-times" class="suggested-times">
+          <h4>Suggested Available Times:</h4>
+          <div id="time-suggestions" class="time-suggestions-list"></div>
+        </div>
+      </div>
+      <br />
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+        <fieldset>
+          <legend><strong>Facilities Needed</strong></legend>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="classroom"
+              data-target="classroom_check"
+              data-toggle-target="u_classroom_number"
+              onclick="onlyOne(this, 'u_facility'); toggleDependentInput(this)"
+            />
+            Classroom (Max Capacity = 45) Room No.
+            <input
+              type="text"
+              id="u_classroom_number"
+              name="u_classroom_number"
+              data-target="classroom_number"
+              disabled
+              style="width: 10%"
+            />
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="gym"
+              data-target="gym_check"
+              onclick="onlyOne(this, 'u_facility')"
+            />
+            Gymnasium (Max Capacity = 1,500)
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="auditorium"
+              data-target="auditorium_check"
+              onclick="onlyOne(this, 'u_facility')"
+            />
+            Auditorium (Max Capacity = 250)
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="theater"
+              data-target="theater_check"
+              onclick="onlyOne(this, 'u_facility')"
+            />
+            Theater (Max Capacity = 600)
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="review_center"
+              data-target="review_center_check"
+              onclick="onlyOne(this, 'u_facility')"
+            />
+            G311-G312 - Review Center (Max Capacity = 100)
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="training"
+              data-target="training_check"
+              onclick="onlyOne(this, 'u_facility')"
+            />
+            Training Center (Max Capacity = 40)
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_facility"
+              value="other_facilities"
+              data-target="others_check"
+              data-toggle-target="u_others_number,u_others_max"
+              onclick="onlyOne(this, 'u_facility'); toggleDependentInput(this)"
+            />
+            Others, Specify:
+            <input
+              type="text"
+              id="u_others_number"
+              name="u_others_number"
+              data-target="others_number"
+              disabled
+              style="width: 35%"
+            />
+            Max Capacity:
+            <input
+              type="text"
+              id="u_others_max"
+              name="u_others_max"
+              data-target="others_max"
+              disabled
+              style="width: 20%"
+            />
+          </label>
+
+          <label>
+            Number of Participants:
+            <input
+              type="text"
+              id="u_participant"
+              name="u_participant"
+              data-target="participant"
+              style="width: 100%"
+            />
+            <small
+              id="participant_max_note"
+              style="color: #666; display: block; margin-top: 0.25rem"
+            >
+              Max: —
+            </small>
+          </label>
+        </fieldset>
+
+        <fieldset>
+          <legend><strong>Type of Activity</strong></legend>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="play_presentation"
+              data-target="play_presentation_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Play Presentation
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="convention"
+              data-target="convention_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Convention
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="seminar"
+              data-target="seminar_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Training / Seminar / Conference
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="graduation"
+              data-target="graduation_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Graduation / Convocation
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="fellowship"
+              data-target="fellowship_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Fellowship
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="basketball_volleyball"
+              data-target="basketball_volleyball_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Basketball / Volleyball
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="sportsfest"
+              data-target="sportsfest_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Sportsfest
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="review"
+              data-target="review_check"
+              onclick="onlyOne(this, 'u_activity_type')"
+            />
+            Review
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_activity_type"
+              value="other_activity"
+              data-target="other_activity_check"
+              data-toggle-target="u_activity_specify"
+              onclick="onlyOne(this, 'u_activity_type'); toggleDependentInput(this)"
+            />
+            Others, Specify:
+            <input
+              type="text"
+              id="u_activity_specify"
+              name="u_activity_specify"
+              data-target="activity_specify"
+              disabled
+              style="width: 75%"
+            />
+          </label>
+        </fieldset>
+      </div>
+      <br />
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem">
+        <fieldset>
+          <legend><strong>Equipment Needed</strong></legend>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_whiteboard_check"
+              value="yes"
+              data-target="whiteboard_check"
+            />
+            Whiteboard
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_chairs_check"
+              value="yes"
+              data-toggle-target="u_chairs"
+              data-target="chairs_check"
+              onclick="toggleDependentInput(this)"
+            />
+            Chairs:
+            <input
+              type="text"
+              id="u_chairs"
+              name="u_chairs"
+              data-target="chairs"
+              disabled
+              style="width: 20%"
+            />
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_ls_tables_check"
+              value="yes"
+              data-toggle-target="u_ls_tables"
+              data-target="ls_tables_check"
+              onclick="toggleDependentInput(this)"
+            />
+            Long/Short Table:
+            <input
+              type="text"
+              id="u_ls_tables"
+              name="u_ls_tables"
+              data-target="ls_tables"
+              disabled
+              style="width: 20%"
+            />
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_rostrum_check"
+              value="yes"
+              data-target="rostrum_check"
+            />
+            Rostrum/Podium
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_round_tables_check"
+              value="yes"
+              data-toggle-target="u_round_tables"
+              data-target="round_tables_check"
+              onclick="toggleDependentInput(this)"
+            />
+            Round Table:
+            <input
+              type="text"
+              id="u_round_tables"
+              name="u_round_tables"
+              data-target="round_tables"
+              disabled
+              style="width: 20%"
+            />
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_others_equipment_check"
+              value="yes"
+              data-toggle-target="u_others_equipment"
+              data-target="others_equipment"
+              onclick="toggleDependentInput(this)"
+            />
+            Others, Specify:
+          </label>
+          <input
+            type="text"
+            id="u_others_equipment"
+            name="u_others_equipment"
+            data-target="others_equipment"
+            disabled
+            style="width: 75%"
+          />
+          <br />
+          <fieldset>
+            <label>
+              <strong>*With Food/Canteen Services?</strong>
+              <br>
+              <input
+                type="checkbox"
+                name="u_food_option"
+                value="with_food"
+                onclick="onlyOne(this, 'u_food_option')"
+                data-target="with_food"
+              />
+              Yes
+            </label>
+            
+            <label>
+              <input
+                type="checkbox"
+                name="u_food_option"
+                value="without_food"
+                onclick="onlyOne(this, 'u_food_option')"
+                data-target="without_food"
+              />
+              No
+            </label>
+          </fieldset>
+        </fieldset>
+
+        <fieldset>
+          <legend><strong>Audio-Visual Requirements</strong></legend>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_mic_check"
+              value="yes"
+              data-toggle-target="u_mic"
+              data-target="mic_check"
+              onclick="toggleDependentInput(this)"
+            />
+            Wired/Wireless Microphones:
+            <input
+              type="number"
+              id="u_mic"
+              name="u_mic"
+              data-target="mic"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              min="0"
+              step="1"
+              oninput="this.value = this.value.replace(/\D/g, '')"
+              onkeydown="return /[0-9]|Backspace|Delete|ArrowLeft|ArrowRight/.test(event.key)"
+              disabled
+              style="width: 20%"
+            />
+            pcs
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_mic_stands_check"
+              value="yes"
+              data-toggle-target="u_mic_stands"
+              data-target="mic_stands_check"
+              onclick="toggleDependentInput(this)"
+            />
+            Microphone Stands:
+            <input
+              type="number"
+              id="u_mic_stands"
+              name="u_mic_stands"
+              data-target="mic_stands"
+              inputmode="numeric"
+              pattern="[0-9]*"
+              min="0"
+              step="1"
+              oninput="this.value = this.value.replace(/\D/g, '')"
+              onkeydown="return /[0-9]|Backspace|Delete|ArrowLeft|ArrowRight/.test(event.key)"
+              disabled
+              style="width: 20%"
+            />
+            pcs
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_projector_check"
+              value="yes"
+              data-target="projector_check"
+            />
+            Projector
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_pa_system_check"
+              value="yes"
+              data-target="pa_system_check"
+            />
+            PA System
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_wifi_check"
+              value="yes"
+              data-target="wifi_check"
+            />
+            WiFi Connection
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_monitor_board_check"
+              value="yes"
+              data-target="monitor_board_check"
+            />
+            Podium Monitor Board
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_livestream_check"
+              value="yes"
+              data-target="livestream_check"
+            />
+            Live Streaming
+          </label>
+
+          <strong>Lights</strong>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_house_lights_check"
+              value="yes"
+              data-target="house_lights_check"
+            />
+            House Lights / Par Lights
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_follow_spot_check"
+              value="yes"
+              data-target="follow_spot_check"
+            />
+            Follow Spotlights
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_stage_lights_check"
+              value="yes"
+              data-target="stage_lights_check"
+            />
+            Stage Lights
+          </label>
+
+          <label>
+            <input
+              type="checkbox"
+              name="u_others_av_check"
+              value="yes"
+              data-toggle-target="u_others_AV"
+              data-target="others_AV"
+              onclick="toggleDependentInput(this)"
+            />
+            Other AV needs:
+          </label>
+          <input
+            type="text"
+            id="u_others_AV"
+            name="u_others_AV"
+            data-target="others_AV"
+            disabled
+            style="width: 50%"
+          />
+        </fieldset>
+      </div>
+
+      <!--tbd-->
+
+      <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+        <button type="button" id="submitExternalForm" style="flex: 1 1 auto; min-width: 180px;">
+          <i class="fas fa-paper-plane"></i>
+          Submit Form
+        </button>
+        <button type="button" id="printExternalForm" style="flex: 1 1 auto; min-width: 180px;">
+          <i class="fas fa-print"></i>
+          Print Form
+        </button>
+      </div>
+      <p style="margin-top: 1rem; color: #666; font-size: 0.9rem;">
+        <i class="fas fa-info-circle"></i>
+        Submit first to save your reservation. Then print after the form has been submitted.
+      </p>
+    </form>
+
+        <hr class="section-divider" />
+
+        <!-- Second Section -->
+        <div style="text-align: center">
+          <strong style="font-size: 15px"
+            >FACILITIES AND SERVICES REQUEST FORM FOR EXTERNAL CLIENTS</strong
+          ><br />
+          <span style="font-size: 13px"
+            >(Please read House Rules / Policy before filing out this
+            form.)</span
+          >
+        </div>
+        <br />
+
+        <table>
+          <tr>
+            <td colspan="2" style="width: 50%">
+              <strong>Name of Agency/Organization:</strong>
+              <input
+                type="text"
+                id="organization"
+                name="organization_name"
+                style="width: 98%"
+              />
+            </td>
+            <td colspan="1" style="width: 30%">
+              <strong>Contact Person:</strong>
+              <input
+                type="text"
+                id="contact_person"
+                name="contact_person"
+                style="width: 97%"
+              />
+            </td>
+            <td colspan="1" style="width: 20%">
+              <strong>Contact No.:</strong>
+              <input
+                type="text"
+                id="contact_number"
+                name="contact_number"
+                style="width: 96%"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <strong>Address of Agency/Organization:</strong>
+              <input
+                type="text"
+                id="agency_org"
+                name="agency_org"
+                style="width: 99%"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <strong>Title/Theme of Activity:</strong>
+              <input
+                type="text"
+                id="title_theme"
+                name="title_theme"
+                style="width: 99%"
+              />
+            </td>
+            <td colspan="2">
+              <strong>Purpose of Activity:</strong>
+              <input
+                type="text"
+                id="purpose"
+                name="purpose"
+                style="width: 99%"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 25%">
+              <strong>Date being reserved:</strong>
+              <input
+                type="date"
+                id="reserve_date"
+                name="reserve_date"
+                style="width: 99%"
+              />
+            </td>
+            <td colspan="1" style="width: 20%">
+              <strong>Time Start:</strong>
+              <input
+                type="time"
+                id="time_start"
+                name="time_start"
+                style="width: 95%"
+              />
+            </td>
+            <td colspan="1" style="width: 20%">
+              <strong>Time End:</strong>
+              <input
+                type="time"
+                id="time_end"
+                name="time_end"
+                style="width: 96%"
+              />
+            </td>
+            <td colspan="1" style="width: 35%">
+              <strong>Number of Participants</strong>
+              <input
+                type="text"
+                id="participant"
+                name="participant"
+                style="width: 96%"
+              />
+            </td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <div style="display: flex; justify-content: space-between">
+                <div style="width: 50%">
+                  <strong>*With Food/Canteen Services?</strong>&nbsp;&nbsp;
+                  <label>
+                    <input
+                      type="checkbox"
+                      id="with_food"
+                      name="activity-type"
+                      value="with_food"
+                      onclick="onlyOne(this)"
+                    />
+                    Yes
+                  </label>
+                  &nbsp;&nbsp;
+                  <label>
+                    <input
+                      type="checkbox"
+                      id="without_food"
+                      name="activity-type"
+                      value="without_food"
+                      onclick="onlyOne(this)"
+                    />
+                    No
+                  </label>
+                </div>
+
+                <div style="width: 50%; text-align: center">
+                  <strong>Canteen</strong><br />
+                  <strong>___________________</strong><br />
+                  <strong>(Name | Signature | Date)</strong>
+                </div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2">
+              <strong>Facilities Needed</strong><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="classroom_check"
+                  name="activity-type"
+                  value="classroom"
+                />
+                Classroom (Max Capacity = 45) Room No. &nbsp;
+                <input
+                  type="text"
+                  id="classroom_number"
+                  name="classroom_number"
+                  style="width: 10%"
+                /> </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="gym_check"
+                  name="activity-type"
+                  value="gym"
+                />
+                Gymnasium (Max Capacity = 1,500) </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="auditorium_check"
+                  name="activity-type"
+                  value="auditorium"
+                />
+                Auditorium (Max Capacity = 250) </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="theater_check"
+                  name="activity-type"
+                  value="theater"
+                />
+                Theater (Max Capacity = 600) </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="review_center_check"
+                  name="activity-type"
+                  value="review_center"
+                />
+                G311-G312- Review Center (Max Capacity = 100) </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="training_check"
+                  name="activity-type"
+                  value="training"
+                />
+                Training Center (Max Capacity = 40) </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="others_check"
+                  name="activity-type"
+                  value="other_facilities"
+                />
+                Others, Specify &nbsp;
+                <input
+                  type="text"
+                  id="others_number"
+                  name="others_number"
+                  style="width: 35%"
+                /><br />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Max Capacity:
+                &nbsp;
+                <input
+                  type="text"
+                  id="others_max"
+                  name="others_max"
+                  style="width: 10%"
+                />
+              </label>
+            </td>
+            <td colspan="2">
+              <strong>Type of Activity</strong><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="play_presentation_check"
+                  name="activity-type"
+                  value="play_presentation"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Play Presentation </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="convention_check"
+                  name="activity-type"
+                  value="convention"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Convention </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="seminar_check"
+                  name="activity-type"
+                  value="seminar"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Training / Seminar / Conference </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="graduation_check"
+                  name="activity-type"
+                  value="graduation"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Graduation / Convocation </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="fellowship_check"
+                  name="activity-type"
+                  value="fellowship"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Fellowship </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="basketball_volleyball_check"
+                  name="activity-type"
+                  value="basketball_volleyball"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Basketball / Volleyball </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="sportsfest_check"
+                  name="activity-type"
+                  value="sportsfest"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Sportsfest </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="review_check"
+                  name="activity-type"
+                  value="review"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Review </label
+              ><br />
+
+              <label>
+                <input
+                  type="checkbox"
+                  id="other_activity_check"
+                  name="activity-type"
+                  value="other_activity"
+                  onclick="onlyOne(this, 'activity-type')"
+                />
+                Others, Specify:
+                <input
+                  type="text"
+                  id="activity_specify"
+                  name="activity_specify"
+                  style="width: 75%"
+                />
+              </label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1">
+              <strong>Equipment Needed</strong><br /><br />
+
+              <label>• Furniture</label><br />
+
+              <label>
+                <input type="checkbox" id="whiteboard_check" />
+                Whiteboard: </label
+              ><br />
+
+              <label>
+                <input type="checkbox" id="chairs_check" />
+                Chairs:
+                <input
+                  type="number"
+                  id="chairs"
+                  name="chairs"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  min="0"
+                  step="1"
+                  oninput="this.value = this.value.replace(/\D/g, '')"
+                  onkeydown="return /[0-9]|Backspace|Delete|ArrowLeft|ArrowRight/.test(event.key)"
+                  style="width: 20%"
+                /> </label
+              ><br />
+
+              <label>
+                <input type="checkbox" id="ls_tables_check" />
+                Long/Short Table:
+                <input
+                  type="number"
+                  id="ls_tables"
+                  name="ls_tables"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  min="0"
+                  step="1"
+                  oninput="this.value = this.value.replace(/\D/g, '')"
+                  onkeydown="return /[0-9]|Backspace|Delete|ArrowLeft|ArrowRight/.test(event.key)"
+                  style="width: 20%"
+                /> </label
+              ><br />
+
+              <label>
+                <input type="checkbox" id="rostrum_check" />
+                Rostrum: </label
+              ><br />
+
+              <label>
+                <input type="checkbox" id="round_tables_check" />
+                Round Table:
+                <input
+                  type="number"
+                  id="round_tables"
+                  name="round_tables"
+                  inputmode="numeric"
+                  pattern="[0-9]*"
+                  min="0"
+                  step="1"
+                  oninput="this.value = this.value.replace(/\D/g, '')"
+                  onkeydown="return /[0-9]|Backspace|Delete|ArrowLeft|ArrowRight/.test(event.key)"
+                  style="width: 20%"
+                /> </label
+              ><br />
+
+              <label>
+                • Others, Specify:
+                <input type="checkbox" id="others_equipment_check" /><br />
+                <input
+                  type="text"
+                  id="others_equipment"
+                  name="others_equipment"
+                  style="width: 75%"
+                /> </label
+              ><br />
+            </td>
+
+            <td colspan="3">
+              <strong>*Audio-Visual Requirements</strong>
+
+              <div style="display: flex; justify-content: space-between">
+                <div style="width: 58%">
+                  <label>
+                    <input type="checkbox" id="mic_check" />
+                    Microphones:
+                    <input
+                      type="tel"
+                      id="mic"
+                      name="mic"
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      oninput="this.value = this.value.replace(/\D/g, '')"
+                      style="width: 20%"
+                    />
+                    pcs
+                  </label>
+
+                  <label>
+                    <input type="checkbox" id="mic_stands_check" />
+                    Microphone Stands:
+                    <input
+                      type="tel"
+                      id="mic_stands"
+                      name="mic_stands"
+                      inputmode="numeric"
+                      pattern="[0-9]*"
+                      oninput="this.value = this.value.replace(/\D/g, '')"
+                      style="width: 20%"
+                    />
+                    pcs
+                  </label>
+
+                  <label
+                    ><input type="checkbox" id="projector_check" />
+                    Projector</label
+                  >
+                  <label
+                    ><input type="checkbox" id="pa_system_check" /> PA
+                    System</label
+                  >
+                </div>
+
+                <div style="width: 40%">
+                  <label
+                    ><input type="checkbox" id="wifi_check" /> WiFi
+                    Connection</label
+                  >
+                  <label
+                    ><input type="checkbox" id="monitor_board_check" /> Podium
+                    Monitor Board</label
+                  >
+                  <label
+                    ><input type="checkbox" id="livestream_check" /> Live
+                    Streaming</label
+                  >
+                </div>
+              </div>
+
+              <div style="display: flex; flex-wrap: wrap">
+                <strong>Lights</strong>
+                <label
+                  ><input type="checkbox" id="house_lights_check" /> House
+                  Lights / Par Lights</label
+                >
+                <label
+                  ><input type="checkbox" id="follow_spot_check" /> Follow
+                  Spotlights</label
+                >
+                <label
+                  ><input type="checkbox" id="stage_lights_check" /> Stage
+                  Lights</label
+                >
+              </div>
+
+              <label
+                ><input type="checkbox" id="others_av_check" /> Other AV
+                needs:</label
+              >
+              <input
+                type="text"
+                id="others_AV"
+                name="others_AV"
+                style="width: 50%"
+              />
+
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-top: 20px;
+                "
+              >
+                <div style="text-align: center; width: 50%">
+                  <strong>*Maintenance Operation Unit:</strong><br />
+                  <strong>____________________________</strong><br />
+                  <strong>(Name | Signature | Date)</strong>
+                </div>
+                <div style="text-align: center; width: 50%">
+                  <strong>*Media Center:</strong><br />
+                  <strong>____________________________</strong><br />
+                  <strong>(Name | Signature | Date)</strong>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+
+        <table>
+          <strong>*Facilities Services</strong>
+          <td>
+            <div>
+              Please attach a floor plan and include all set-up needs. (Podium,
+              chairs, tables, riser, platform, *native cloth, etc)
+            </div>
+          </td>
+        </table>
+        <table>
+          <td>
+            <div>
+              If the activity will be cancelled, the client must inform the UC
+              *Campus Management Office at least three (3) days before the
+              scheduled date of activity.<br />
+              (Note: All activities are generakky cancelled whenever the school
+              is closed caused by inclement weather.)
+            </div>
+          </td>
+        </table>
+
+        <table class="outer-border">
+          <strong>Billing Particulars</strong>
+          <tr>
+            <td colspan="1">
+              <label>
+                Use of
+                <input
+                  type="text"
+                  id="billing_use"
+                  name="billing_use"
+                  style="width: 50%"
+                />
+                <br />
+                Other Fees:
+                <input
+                  type="text"
+                  id="billing_other1"
+                  name="billing_other1"
+                  style="width: 50%"
+                />
+                <br />
+                <input
+                  type="text"
+                  id="billing_other2"
+                  name="billing_other2"
+                  style="width: 50%"
+                />
+                <br /><br />
+                Full Payment<br />
+                Less Deposit/Payment<br />
+                Balance<br />
+                Additional
+              </label>
+            </td>
+
+            <td colspan="1">
+              <label>
+                PhP
+                <input
+                  type="text"
+                  id="php_use"
+                  name="php_use"
+                  style="width: 50%"
+                />
+                <br />
+                PhP
+                <input
+                  type="text"
+                  id="php_fees1"
+                  name="php_fees1"
+                  style="width: 50%"
+                />
+                <br />
+                PhP
+                <input
+                  type="text"
+                  id="php_fees2"
+                  name="php_fees2"
+                  style="width: 50%"
+                />
+                <br /><br />
+                <strong>TOTAL</strong> PhP
+                <input
+                  type="text"
+                  id="php_full"
+                  name="php_full"
+                  style="width: 50%"
+                />
+                <br />
+                PhP
+                <input
+                  type="text"
+                  id="php_less"
+                  name="php_less"
+                  style="width: 50%"
+                />
+                <br />
+                PhP
+                <input
+                  type="text"
+                  id="php_bal"
+                  name="php_bal"
+                  style="width: 50%"
+                />
+                <br />
+                PhP
+                <input
+                  type="text"
+                  id="php_additional"
+                  name="php_additional"
+                  style="width: 50%"
+                />
+                <br />
+              </label>
+            </td>
+
+            <td colspan="1">
+              <label>
+                <br /><br /><br /><br />
+                <strong>TOTAL</strong> O.R. #
+                <input
+                  type="text"
+                  id="OR_full"
+                  name="OR_full"
+                  style="width: 50%"
+                />
+                <br />
+                O.R. #
+                <input
+                  type="text"
+                  id="OR_less"
+                  name="OR_less"
+                  style="width: 50%"
+                />
+                <br />
+                O.R. #
+                <input
+                  type="text"
+                  id="OR_bal"
+                  name="OR_bal"
+                  style="width: 50%"
+                />
+                <br />
+                O.R. #
+                <input
+                  type="text"
+                  id="OR_additional"
+                  name="OR_additional"
+                  style="width: 50%"
+                />
+                <br />
+              </label>
+            </td>
+          </tr>
+        </table>
+
+        <table style="width: 100%; table-layout: fixed">
+          <colgroup>
+            <col style="width: 33%" />
+            <col style="width: 33%" />
+            <col style="width: 34%" />
+            <!-- adds up to 100% -->
+          </colgroup>
+          <tr>
+            <td style="background-color: #918f8f">
+              <strong>Concurred with</strong><br />
+            </td>
+            <td style="background-color: #918f8f">
+              <strong>Venue Reserved by</strong>
+            </td>
+            <td style="background-color: #918f8f">
+              <strong>*Approved by</strong>
+            </td>
+          </tr>
+          <tr>
+            <td><br /><br /></td>
+            <td><br /><br /></td>
+            <td><br /><br /></td>
+          </tr>
+          <tr>
+            <td style="text-align: center"><strong>Contact Person</strong></td>
+            <td style="text-align: center">
+              <strong>Director, *Campus Management Office</strong>
+            </td>
+            <td style="text-align: center">
+              <strong>VP for Administration & Student Services</strong>
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">
+              <strong>(Name | Signature | Date)</strong>
+            </td>
+            <td style="text-align: center">
+              <strong>(Name | Signature | Date)</strong>
+            </td>
+            <td style="text-align: center">
+              <strong>(Name | Signature | Date)</strong>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Pg 1 nav -->
+        <div class="navigation">
+          <span>Page 1 of 2</span>
+          <button type="button" onclick="goToPage(2)">Next Page →</button>
+        </div>
+      </div>
+
+      <!-- PAGE 2 -->
+      <div id="page2" class="form-page">
+        <div class="header-row">
+          <img src="pending logo" alt="University of the Cordilleras Logo" />
+          <div style="text-align: right">
+            <strong>VICE PRESIDENT FOR ACADEMICS AND RESEARCH</strong><br />
+            <span
+              >___________________________________ <br />
+              College
+              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span
+            >
+          </div>
+        </div>
+
+        <hr class="section-divider" />
+
+        <table>
+          <tr>
+            <td>
+              <strong>TERMS AND CONDITIONS</strong><br />
+              <strong
+                >Please read and agree to the terms before making a
+                reservation:</strong
+              >
+
+              <ol>
+                <li>
+                  1. This reservation form becomes a binding agreement only upon
+                  full payment of the required fee. This fee is exclusively
+                  <br />used by the management to defray UC expenses for
+                  maintenance of facilities.
+                </li>
+                <li>
+                  2. User agrees to follow and comply with UC Facilities House
+                  Rules which is indicated below this form and made an
+                  <br />integral part of the documentation.
+                </li>
+                <li>
+                  3. Balance must be paid three (3) working days before the
+                  activity; UC has exclusive right to cancel the activity upon
+                  failure of full payment.
+                </li>
+                <li>
+                  4. UC facility reserved shall be used solely for the activity
+                  described. UC has exclusive right to cancel the activity
+                  thereof by the user for non-compliance.
+                </li>
+                <li>
+                  5. User is responsible for security measures to prevent any
+                  injury or death sustained by any person within the premises of
+                  the UC facility being used throughout the duration of the
+                  activity.
+                </li>
+                <li>
+                  6. User must observe cleanliness, and the time schedule
+                  specified in the reservation, in cases however, that the
+                  activity exceeds the alloted time, users are charged on an
+                  hourly basis.
+                </li>
+                <li>
+                  7. The facilities management is committed to respect the terms
+                  agreed upon with the User For his part, the User must occupy,
+                  use, and vacate the facility strictly in accordance with the
+                  agreement.
+                </li>
+              </ol>
+            </td>
+          </tr>
+        </table>
+        <table>
+          <tr>
+            <td>
+              <strong>1.&nbsp;&nbsp;FIRST COME, FIRST-SERVED BASIS.</strong>
+              Reservation must be made two (2) weeks in advance of activity.<br /><br />
+
+              <strong>2.&nbsp;&nbsp;TERMS OF PAYMENT.</strong> Fifty percent
+              (50%) down payment of the total payment must be paid before
+              reservation is finalized. The balance should be paid during
+              business hours three (3) days before the day of activity.
+              <ul>
+                <li>
+                  <strong>Change of Schedule:</strong> For any changes in
+                  reservation arrangements, give facilities management six (6)
+                  working days notice.
+                </li>
+                <li>
+                  <strong>Cancellation of Reservation:</strong> If for any
+                  reason USER decides to cancel, 20% of the agreed total payment
+                  will be deducted from the 50% down payment to cover
+                  administrative costs. The balance will be refunded to USER.
+                </li>
+              </ul>
+              <br />
+
+              <strong>3.&nbsp;&nbsp;OPTIMUM OCCUPANCY.</strong> The maximum
+              capacities of the facilities are indicated at the front page of
+              this form. Do not exceed to the maximum to avoid congestion,
+              safety and security problems. Exceeding the capacity may endanger
+              lives. This applies especially to those involved in fund-raising
+              activities where tickets are sold.
+              <ul>
+                <li>
+                  It shall be the prerogative of UC
+                  <em>Campus Management Office</em> to disapprove the use of the
+                  facility, cancel the scheduled activity, or rescind the
+                  agreement in cases of imminent danger or threat to life and
+                  property.
+                </li>
+                <li>
+                  It shall be the sole responsibility of USER when untoward
+                  incidents or accidents happen during the scheduled activity.
+                </li>
+              </ul>
+              <br />
+
+              <strong>4.&nbsp;&nbsp;VANDALISM.</strong> Damage to the UC
+              property / facilities (graffiti and other forms of wall
+              defacement, malfunctioning equipment, broken furniture) will be
+              the liability of USER who will defray cost of repair, replacement
+              or rehabilitation.<br /><br />
+
+              <strong>5.&nbsp;&nbsp;SPECIFIC BANS.</strong> Violation of the
+              following rules will cause possible disqualification of USER from
+              ever using / renting of UC Facilities. Due to the fact that the
+              facilities are located within school premises, the following rules
+              are non-negotiable.
+              <ul>
+                <li>
+                  <strong>NO SMOKING:</strong> USER is responsible for informing
+                  facility occupants (whether audience or performer) that the
+                  school / facility premises is
+                  <strong>STRICTLY NO SMOKING ZONE</strong>.
+                </li>
+                <li>
+                  <strong>NO LIQUOR ALLOWED:</strong> Consumption of liquor
+                  within school premises is absolutely banned. USER is likewise
+                  responsible for informing facility occupants (audience,
+                  performers, and working crew) of this rule.
+                </li>
+              </ul>
+              <br />
+
+              <strong>6.&nbsp;&nbsp;LITTERING/SPITTING.</strong> Trash
+              receptacles are strategically located within facility premises;
+              kindly use these for disposing of litter.<br /><br />
+
+              <strong>7.&nbsp;&nbsp;COMBUSTIBLE MATERIALS.</strong> Use of
+              combustible materials for program / production props and
+              decoration are not allowed in all facilities. However, in
+              exceptional cases such may be permitted only upon due request and
+              discretion of the Campus Management Director.<br /><br />
+
+              <strong>8.&nbsp;&nbsp;CATERING SERVICES.</strong> For activities
+              requiring the serving of food / refreshments / drinks, Evangel
+              Services is the only allowed caterer in UC.<br /><br />
+
+              <strong>9.&nbsp;&nbsp;USER/S</strong> of the facility should abide
+              by additional rules prescribed by the
+              <em>Campus Management Office</em> not covered herein.
+            </td>
+          </tr>
+        </table>
+        <table class="outer-border">
+          <tr>
+            <td>
+              <label
+                >I have read and discussed with the Director of *Campus
+                Management Office the above policies, guidelines, and house
+                rules and accept personal responsibility to abided them. I
+                understand that the use of UC facilities is contingent upon the
+                approval of the concerned offices.</label
+              >
+            </td>
+          </tr>
+          <tr>
+            <td style="text-align: center">
+              <strong>*Media Center:</strong><br />
+              <strong>____________________________</strong><br />
+              <strong>(Name | Signature | Date)</strong>
+            </td>
+          </tr>
+        </table>
+
+        <table>
+          <tr>
+            <td style="text-align: center" colspan="5">
+              <strong
+                >(To be accomplished by *CMO Staff)<br /><br />EVALUATION OF THE
+                REQUESTED FACILITY</strong
+              >
+            </td>
+          </tr>
+          <tr>
+            <td
+              colspan="1"
+              rowspan="2"
+              style="text-align: left; width: 40%; vertical-align: bottom"
+            >
+              <label>The Facility is:</label>
+            </td>
+            <td colspan="2" style="width: 30%; text-align: center">
+              <label>Before the Activity</label>
+            </td>
+            <td colspan="2" style="width: 30%; text-align: center">
+              <label>After the Activity</label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 15%; text-align: center">
+              <label>YES</label>
+            </td>
+            <td colspan="1" style="width: 15%; text-align: center">
+              <label>NO</label>
+            </td>
+            <td colspan="1" style="width: 15%; text-align: center">
+              <label>YES</label>
+            </td>
+            <td colspan="1" style="width: 15%; text-align: center">
+              <label>NO</label>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 40%">
+              <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• safe and orderly</label>
+            </td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 40%">
+              <label
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• with equipment, lights
+                working</label
+              >
+            </td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 40%">
+              <label
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• complete with chairs</label
+              >
+            </td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+          </tr>
+          <tr>
+            <td colspan="1" style="width: 40%">
+              <label
+                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;• With restroom working</label
+              >
+            </td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+            <td colspan="1" style="width: 15%"><label></label></td>
+          </tr>
+          <tr>
+            <td colspan="5" style="text-align: center">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 5px;
+                "
+              >
+                <div style="text-align: left; width: 51%">
+                  <label>Evaluated by:</label>
+                </div>
+                <div style="text-align: left; width: 49%">
+                  <label>Date evaluated:</label>
+                </div>
+              </div>
+
+              <div style="display: flex; justify-content: space-between">
+                <div style="text-align: left; width: 50%">
+                  <label>_____________________________</label><br />
+                  <label>(Name | Signature)</label>
+                </div>
+                <div style="text-align: left; width: 50%">
+                  <strong>_______________________</strong>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </form>
+
+    <script>
+      function goToPage(pageNumber) {
+        document
+          .querySelectorAll(".form-page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page" + pageNumber).classList.add("active");
+      }
+    </script>
+
+    <script>
+      function goToPage(pageNumber) {
+        document
+          .querySelectorAll(".form-page")
+          .forEach((p) => p.classList.remove("active"));
+        document.getElementById("page" + pageNumber).classList.add("active");
+      }
+      window.goToPage = goToPage;
+    </script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const HOLIDAYS = [
+          "2025-01-01",
+          "2025-04-09",
+          "2025-12-25",
+        ];
+        const EARLIEST = "07:30";
+        const LATEST = "19:30";
+        const CURFEW_URL = "exemption-form.html";
+
+        const submitExternalBtn = document.getElementById("submitExternalForm");
+        const printExternalBtn = document.getElementById("printExternalForm");
+        if (!submitExternalBtn) {
+          console.error("submitExternalForm button not found");
+          return;
+        }
+        if (!printExternalBtn) {
+          console.error("printExternalForm button not found");
+          return;
+        }
+        window.externalFormSubmitted = false;
+
+        const toMin = (t) => {
+          const [h, m] = t.split(":").map(Number);
+          return h * 60 + m;
+        };
+        function curfewReasons() {
+          const date = document.getElementById("u_reserve_date")?.value;
+          const start = document.getElementById("u_time_start")?.value;
+          const end = document.getElementById("u_time_end")?.value;
+
+          const reasons = [];
+          if (date) {
+            const [year, month, day] = date.split("-").map(Number);
+            const d = new Date(year, month - 1, day);
+
+            const isSunday = d.getDay() === 0;
+            if (isSunday) reasons.push("• Event is on a **Sunday**.");
+
+            if (HOLIDAYS.includes(date)) {
+              reasons.push("• Event is on a **holiday**.");
+            }
+          }
+
+          if (!start || !end) return reasons;
+
+          if (toMin(start) < toMin(EARLIEST)) {
+            reasons.push("• Starts **before 7:30-AM**.");
+          }
+
+          if (toMin(end) > toMin(LATEST)) {
+            reasons.push("• Ends **after 7:30-PM**.");
+          }
+
+          return reasons;
+        }
+
+        /* Time conflict checking */
+        async function checkTimeConflicts() {
+          const date = document.getElementById("u_reserve_date")?.value;
+          const start = document.getElementById("u_time_start")?.value;
+          const end = document.getElementById("u_time_end")?.value;
+          const venue = getSelectedFacility() || localStorage.getItem('selectedReservationVenue');
+
+          if (!date || !start || !end || !venue) {
+            hideTimeConflictWarning();
+            return;
+          }
+
+          try {
+            const response = await fetch('/api/reservations/check-time-conflict', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+              },
+              body: JSON.stringify({
+                reservation_date: date,
+                time_start: start + ':00',
+                time_end: end + ':00',
+                location: venue
+              })
+            });
+
+            const result = await response.json();
+
+            if (result.hasConflicts) {
+              showTimeConflictWarning(result.conflicts, result.suggestedTimes);
+            } else {
+              hideTimeConflictWarning();
+            }
+          } catch (error) {
+            console.error('Error checking time conflicts:', error);
+            hideTimeConflictWarning();
+          }
+        }
+
+        function showTimeConflictWarning(conflicts, suggestedTimes) {
+          const warningDiv = document.getElementById('time-conflict-warning');
+          const suggestionsDiv = document.getElementById('time-suggestions');
+
+          if (warningDiv && suggestionsDiv) {
+            warningDiv.style.display = 'block';
+
+            // Clear previous suggestions
+            suggestionsDiv.innerHTML = '';
+
+            // Add suggested times
+            if (suggestedTimes && suggestedTimes.length > 0) {
+              suggestedTimes.forEach(timeSlot => {
+                const suggestionBtn = document.createElement('div');
+                suggestionBtn.className = 'time-suggestion';
+                suggestionBtn.textContent = `${timeSlot.start} - ${timeSlot.end}`;
+                suggestionBtn.onclick = () => {
+                  document.getElementById('u_time_start').value = timeSlot.start_24h.slice(0, 5);
+                  document.getElementById('u_time_end').value = timeSlot.end_24h.slice(0, 5);
+                  hideTimeConflictWarning();
+                };
+                suggestionsDiv.appendChild(suggestionBtn);
+              });
+            } else {
+              suggestionsDiv.innerHTML = '<p style="color: #666; font-style: italic;">No alternative times available for this date.</p>';
+            }
+          }
+        }
+
+        function hideTimeConflictWarning() {
+          const warningDiv = document.getElementById('time-conflict-warning');
+          if (warningDiv) {
+            warningDiv.style.display = 'none';
+          }
+        }
+
+        // Add event listeners for time conflict checking
+        const timeStartInput = document.getElementById('u_time_start');
+        const timeEndInput = document.getElementById('u_time_end');
+        const dateInput = document.getElementById('u_reserve_date');
+
+        if (timeStartInput) {
+          timeStartInput.addEventListener('change', checkTimeConflicts);
+        }
+        if (timeEndInput) {
+          timeEndInput.addEventListener('change', checkTimeConflicts);
+        }
+        if (dateInput) {
+          dateInput.addEventListener('change', checkTimeConflicts);
+        }
+
+        /* Copy values from user form to internal form */
+        function copyUserValues() {
+          document
+            .querySelectorAll(
+              '#userForm [data-target]:not([type="checkbox"]):not([type="radio"])'
+            )
+            .forEach((src) => {
+              const dst = document.getElementById(src.dataset.target);
+              if (dst) {
+                dst.value = src.value;
+                dst.textContent = src.value;
+              }
+            });
+
+          // checkboxes / radios
+          document
+            .querySelectorAll(
+              '#userForm input[type="checkbox"][data-target], #userForm input[type="radio"][data-target]'
+            )
+            .forEach((src) => {
+              if (!src.checked) return;
+
+              const tgtName = src.dataset.target;
+              const tgtValue = src.dataset.value;
+
+              let dst =
+                tgtValue !== undefined
+                  ? document.querySelector(
+                      `#combinedForm input[name="${tgtName}"][value="${tgtValue}"]`
+                    )
+                  : document.getElementById(tgtName);
+
+              if (dst) dst.checked = true;
+            });
+        }
+
+        /* Handle external submit with curfew check */
+        let curfewAcknowledged = false;
+
+        async function collectExternalFormData() {
+          const form = document.getElementById('userForm');
+          if (!form) return {};
+
+          const formData = new FormData(form);
+          const data = {};
+
+          for (const [key, value] of formData.entries()) {
+            if (data[key] !== undefined) {
+              if (Array.isArray(data[key])) {
+                data[key].push(value);
+              } else {
+                data[key] = [data[key], value];
+              }
+            } else {
+              data[key] = value;
+            }
+          }
+
+          return data;
+        }
+
+        async function handleExternalSubmit() {
+          const reasons = curfewReasons();
+
+          if (reasons.length && !curfewAcknowledged) {
+            const msg =
+              'This booking triggers curfew rules:\n\n' +
+              reasons.join('\n') +
+              '\n\nDo you want to open the Curfew/Exemption form now?';
+            if (confirm(msg)) {
+              window.open(CURFEW_URL, '_blank');
+              curfewAcknowledged = true;
+
+              const flag = document.getElementById('curfew_required');
+              if (flag) flag.value = 'Yes';
+            }
+            return;
+          }
+
+          if (!confirm('Are you ready to submit this form? This will save your reservation and generate the PDF.')) {
+            return;
+          }
+
+          const formObject = await collectExternalFormData();
+
+          const token = localStorage.getItem('token');
+          if (!token) {
+            alert('Please log in to submit the form.');
+            window.location.href = '/login';
+            return;
+          }
+
+          submitExternalBtn.disabled = true;
+          submitExternalBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+
+          try {
+            const response = await fetch('/api/sarf/external/submit', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`
+              },
+              body: JSON.stringify(formObject)
+            });
+
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(`HTTP ${response.status}: ${errorText}`);
+            }
+
+            const result = await response.json();
+
+            if (!result.success) {
+              throw new Error(result.message || 'Failed to submit external client form.');
+            }
+
+            await saveExternalReservationToCalendar();
+            copyUserValues();
+            window.externalFormSubmitted = true;
+
+            showSuccessModalWithPDF({
+              title: 'External Client Form Submitted',
+              message: 'Your external client form has been submitted successfully.',
+              pdfUrl: result.data.pdfUrl,
+              pdfId: result.data.id,
+              downloadUrl: `/api/sarf/external/download/${result.data.id}`,
+              downloadLabel: 'Download External PDF',
+              controlNumber: result.data.control || '',
+              onClose: () => {
+                window.location.href = '/user/my-forms';
+              }
+            });
+          } catch (error) {
+            console.error('Error submitting external form:', error);
+            alert('Unable to submit external form. ' + error.message);
+          } finally {
+            submitExternalBtn.disabled = false;
+            submitExternalBtn.innerHTML = 'Submit Form';
+          }
+        }
+
+        submitExternalBtn.addEventListener('click', handleExternalSubmit);
+        printExternalBtn.addEventListener('click', () => {
+          if (!window.externalFormSubmitted) {
+            alert('Please submit the form first before printing.');
+            return;
+          }
+          window.print();
+        });
+
+        /* Update header info before printing */
+        window.addEventListener("beforeprint", () => {
+          const subDate = document.getElementById("submission-date");
+          if (subDate) {
+            subDate.textContent = new Date().toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            });
+          }
+
+          const ctrlIn = document.getElementById("control");
+          const ctrlOut = document.getElementById("control-display");
+          if (ctrlIn && ctrlOut) {
+            ctrlOut.textContent = ctrlIn.value || "___________";
+          }
+        });
+      });
+    </script>
+
+    <script src="/js/roleUtils.js"></script>
+    <script src="/utils/modals.js"></script>
+
+    <script>
+      // Initialize modals and verify auth
+      document.addEventListener('DOMContentLoaded', function() {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/login';
+          return;
+        }
+
+        fetch('/api/auth/verify', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (!data.user) {
+            window.location.href = '/login';
+            return;
+          }
+
+          if (typeof initializeModals === 'function') {
+            initializeModals();
+          }
+
+          populateSelectedDate();
+        })
+        .catch(error => {
+          console.error('Error verifying user:', error);
+          window.location.href = '/login';
+        });
+      });
+
+      // Function to populate the selected date from calendar
+      function populateSelectedDate() {
+        const selectedDate = localStorage.getItem('selectedReservationDate');
+        const dateField = document.getElementById('u_reserve_date');
+        const printDateField = document.getElementById('reserve_date');
+
+        if (selectedDate && dateField) {
+          dateField.value = selectedDate;
+          if (printDateField) {
+            printDateField.value = selectedDate;
+          }
+          console.log('Pre-populated date from calendar:', selectedDate);
+        } else if (!selectedDate) {
+          // If no date was selected from calendar, redirect back to reservation page
+          alert('Please select a date from the reservation calendar first.');
+          window.location.href = '/user/reservation.html';
+        }
+
+        // Show existing reservations info if any
+        const existingReservations = localStorage.getItem('existingReservations');
+        if (existingReservations) {
+          showExistingReservationsInfo(JSON.parse(existingReservations));
+        }
+      }
+
+      // Function to show existing reservations for the selected date
+      function showExistingReservationsInfo(reservations) {
+        // Remove any existing info div
+        const existingInfo = document.getElementById('existing-reservations-info');
+        if (existingInfo) {
+          existingInfo.remove();
+        }
+
+        const infoDiv = document.createElement('div');
+        infoDiv.id = 'existing-reservations-info';
+        infoDiv.className = 'alert alert-info';
+        infoDiv.style.cssText = `
+          margin: 15px 0;
+          padding: 15px;
+          background: #e3f2fd;
+          border: 1px solid #2196f3;
+          border-radius: 8px;
+          color: #1565c0;
+        `;
+
+        infoDiv.innerHTML = `
+          <div style="display: flex; align-items: center; margin-bottom: 10px;">
+            <i class="fas fa-info-circle" style="margin-right: 8px; color: #2196f3;"></i>
+            <strong>Existing Reservations for This Date:</strong>
+          </div>
+          <div style="margin-left: 20px;">
+            ${reservations.map(res => `
+              <div style="margin: 8px 0; padding: 8px; background: rgba(33, 150, 243, 0.1); border-radius: 4px;">
+                <div style="font-weight: 500;">${res.title}</div>
+                <div style="font-size: 0.9em; color: #666; margin-top: 4px;">
+                  <i class="fas fa-clock" style="margin-right: 5px;"></i> ${res.time}
+                  <span style="margin-left: 15px;">
+                    <i class="fas fa-map-marker-alt" style="margin-right: 5px;"></i> ${res.venue || res.location}
+                  </span>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+          <div style="margin-top: 10px; font-size: 0.9em; color: #1565c0;">
+            <i class="fas fa-lightbulb" style="margin-right: 5px;"></i>
+            <strong>Note:</strong> Choose different times to avoid conflicts.
+          </div>
+        `;
+
+        // Insert after the date field
+        const dateField = document.getElementById('u_reserve_date');
+        if (dateField && dateField.parentNode) {
+          dateField.parentNode.insertBefore(infoDiv, dateField.nextSibling);
+        }
+      }
+
+      // Function to get selected facility
+      function getSelectedFacility() {
+        const facilityCheckboxes = document.querySelectorAll('input[name="u_facility"]:checked');
+        if (facilityCheckboxes.length > 0) {
+          const facility = facilityCheckboxes[0].value;
+          const facilityNames = {
+            'classroom': 'Classroom',
+            'gym': 'Gymnasium',
+            'auditorium': 'Auditorium',
+            'theater': 'Theater',
+            'review_center': 'G311-G312 Review Center',
+            'training': 'Training Center',
+            'other_facilities': document.getElementById('u_others_number')?.value || 'Other Facility'
+          };
+          return facilityNames[facility] || 'TBD';
+        }
+        return 'TBD';
+      }
+
+      // Function to save external reservation to calendar
+      async function saveExternalReservationToCalendar() {
+        try {
+          const reservationData = {
+            reservation_date: document.getElementById('u_reserve_date').value,
+            time_start: document.getElementById('u_time_start').value,
+            time_end: document.getElementById('u_time_end').value,
+            form_type: 'external',
+            title: document.getElementById('u_title_theme').value || 'External Client Activity',
+            location: getSelectedFacility()
+          };
+
+          const response = await fetch('/api/reservations/save-date', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify(reservationData)
+          });
+
+          if (!response.ok) {
+            const error = await response.json();
+            console.error('Failed to save reservation:', error);
+            throw new Error(error.message || 'Failed to save reservation');
+          }
+
+          console.log('External reservation saved successfully');
+          localStorage.setItem('requestFormsNeedsRefresh', Date.now().toString());
+          window.dispatchEvent(new Event('request-forms-refresh'));
+          window.dispatchEvent(new Event('my-forms-refresh'));
+        } catch (error) {
+          console.error('Error saving external reservation:', error);
+          // Don't throw error here to allow form submission to continue
+        }
+      }
+    </script>
+
+  </body>
+</html>

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Request Forms - UC FMO Admin</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="/css/design-system.css">
+    <link rel="stylesheet" href="/utils/navbar.css?v=2">
+    <link rel="stylesheet" href="/utils/modals.css">
+    <link rel="stylesheet" href="/utils/footer.css">
+    <link rel="stylesheet" href="/css/components/modern-filter.css">
+    <link rel="stylesheet" href="/css/admin/request-forms.css">
+    <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            background-color: var(--green-50);
+        }
+
+        .main-content {
+            display: none;
+        }
+        .main-content.show {
+            display: block;
+        }
+        .container {
+            flex: 1;
+        }
+        .forms-header {
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            color: white;
+            border-radius: var(--radius-lg);
+            padding: var(--spacing-2xl) var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .forms-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+        }
+
+        .forms-header h1 {
+            font-size: var(--font-size-3xl);
+            margin: 0 0 var(--spacing-sm);
+            font-weight: 700;
+            position: relative;
+            z-index: 1;
+        }
+
+        .forms-header h1 i {
+            margin-right: var(--spacing-sm);
+        }
+
+        .forms-header p {
+            color: rgba(255, 255, 255, 0.85);
+            font-size: var(--font-size-base);
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .forms-header {
+                padding: var(--spacing-lg) var(--spacing-md);
+            }
+            .forms-header h1 {
+                font-size: var(--font-size-2xl);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="auth-error" class="auth-error-overlay">
+        <div class="overlay-box">
+            <i class="fas fa-exclamation-triangle" style="font-size: 2rem; color: var(--danger); margin-bottom: var(--spacing-md);"></i>
+            <h3>Authentication Required</h3>
+            <p>You need to be logged in as an admin to access this page.</p>
+            <button class="btn btn-primary" onclick="window.location.href='/login'">Go to Login</button>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <!-- Navbar Container -->
+        <div id="navbar-container"></div>
+
+        <div class="container">
+            <!-- Gradient Header -->
+        <div class="forms-header">
+            <h1><i class="fas fa-file-alt"></i> Request Forms Management</h1>
+            <p>Review and manage all user form submissions across the system</p>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="stats-cards" id="statsCards">
+            <div class="stat-card">
+                <div class="stat-number" id="totalForms">0</div>
+                <div class="stat-label">Total Forms</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="pendingForms">0</div>
+                <div class="stat-label">Pending Review</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="acceptedForms">0</div>
+                <div class="stat-label">Accepted</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="rejectedForms">0</div>
+                <div class="stat-label">Rejected</div>
+            </div>
+        </div>
+
+        <!-- Modern Filter Component -->
+        <div id="modernFilter"></div>
+
+        <div id="formsContainer">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                <p>Loading forms...</p>
+            </div>
+        </div>
+
+        <div id="pagination" class="pagination" style="display: none;"></div>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-container"></div>
+
+    <script>
+        // Global variables
+        let formsManager;
+        let modernFilter;
+
+        // Initialize the page
+        function initializePage() {
+            // Initialize Forms Manager for admin
+            formsManager = new FormsManager({
+                apiEndpoint: '/api/sarf/admin/all-forms',
+                itemsPerPage: 4,
+                isAdmin: true,
+                containerId: 'formsContainer',
+                paginationId: 'pagination',
+                statsEnabled: true
+            });
+
+            // Make formsManager globally accessible for AdminFormManager
+            window.formsManager = formsManager;
+
+            // Initialize Modern Filter with search capability
+            modernFilter = new ModernFilter('modernFilter', {
+                showSearch: true,
+                showStatus: true,
+                showType: true,
+                showDateRange: false,
+                placeholder: 'Search by username or email...',
+                onFilter: (filters) => {
+                    formsManager.applyFilters(filters);
+                },
+                onClear: () => {
+                    formsManager.applyFilters({});
+                }
+            });
+
+            // Load initial data
+            formsManager.updateStats();
+            formsManager.loadForms();
+        }
+
+        // Admin-specific functions are now handled by AdminFormManager
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                document.getElementById('auth-error').style.display = 'flex';
+                return;
+            }
+
+            fetch('/api/auth/admin/verify', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) throw new Error('Auth failed');
+                return response.json();
+            })
+            .then(data => {
+                initializeNavbar('admin', 'request-forms', data.user.role);
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.classList.add('show');
+                }
+                const authError = document.getElementById('auth-error');
+                if (authError) {
+                    authError.style.display = 'none';
+                }
+                initializePage();
+            })
+            .catch(() => {
+                const authError = document.getElementById('auth-error');
+                if (authError) {
+                    authError.style.display = 'flex';
+                }
+                localStorage.removeItem('token');
+            });
+
+        function refreshRequestForms() {
+            if (window.formsManager) {
+                window.formsManager.updateStats();
+                window.formsManager.refresh();
+            }
+        }
+
+        window.addEventListener('storage', (event) => {
+            if (event.key === 'requestFormsNeedsRefresh') {
+                refreshRequestForms();
+            }
+        });
+
+        window.addEventListener('focus', () => {
+            if (localStorage.getItem('requestFormsNeedsRefresh')) {
+                refreshRequestForms();
+                localStorage.removeItem('requestFormsNeedsRefresh');
+            }
+        });
+
+        window.addEventListener('request-forms-refresh', () => {
+            refreshRequestForms();
+        });
+        });
+
+
+    </script>
+    <script src="/js/roleUtils.js"></script>
+    <script src="/utils/navbar.js"></script>
+    <script src="/utils/modals.js"></script>
+    <script src="/js/components/modern-filter.js"></script>
+    <script src="/js/utils/forms-manager.js"></script>
+    <script src="/js/admin/form-management.js"></script>
+    <script src="/utils/footer.js"></script>
+</body>
+</html>

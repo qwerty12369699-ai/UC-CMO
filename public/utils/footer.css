@@ -1,0 +1,181 @@
+/* ============================================================
+   Global Footer Styles – UC Campus Management Office
+   ============================================================ */
+
+/* ── Base Footer Wrapper ────────────────────────────────────── */
+.site-footer {
+  background: linear-gradient(180deg, #033E2E 0%, #022a1f 100%);
+  color: #e8f5e9;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+  border-top: 2px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 -12px 40px rgba(1, 27, 18, 0.2);
+}
+
+.site-footer a {
+  color: #b8d9be;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+.site-footer a:hover {
+  color: #f1f5f2;
+  text-decoration: underline;
+}
+
+/* ── Footer Main Row ───────────────────────────────────────── */
+.footer-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 42px 24px 30px;
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.2fr;
+  gap: 32px;
+}
+
+/* ── Brand Column ──────────────────────────────────────────── */
+.footer-brand .footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.footer-brand .footer-logo img {
+  height: 48px;
+  width: auto;
+}
+.footer-brand .footer-logo span {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+.footer-brand p {
+  color: #c5dfcb;
+  font-size: 0.92rem;
+  line-height: 1.7;
+  margin: 0 0 16px;
+  max-width: 340px;
+}
+
+/* ── Footer Column Headings ────────────────────────────────── */
+.footer-col h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 10px;
+}
+
+/* ── Quick Links ───────────────────────────────────────────── */
+.footer-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.footer-links li {
+  margin-bottom: 10px;
+}
+.footer-links li a {
+  font-size: 0.9rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.footer-links li a i {
+  font-size: 0.75rem;
+  color: #6abf69;
+  width: 16px;
+}
+
+/* ── Contact Info ──────────────────────────────────────────── */
+.footer-contact p {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.9rem;
+  margin: 0 0 12px;
+  color: #c5dfcb;
+  line-height: 1.6;
+}
+.footer-contact p i {
+  color: #6abf69;
+  width: 18px;
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* ── Social Icons ──────────────────────────────────────────── */
+.footer-social {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.footer-social a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e8f5e9;
+  font-size: 1.1rem;
+  transition: background 0.25s ease, transform 0.25s ease;
+}
+.footer-social a:hover {
+  background: #2e7d32;
+  color: #fff;
+  transform: translateY(-3px);
+  text-decoration: none;
+}
+
+/* ── Copyright Bar ──────────────────────────────────────────── */
+.footer-bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+  padding: 18px 24px;
+  text-align: center;
+}
+.footer-bottom-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.footer-bottom p {
+  margin: 0;
+  font-size: 0.82rem;
+  color: #9ab7a3;
+}
+.footer-bottom a {
+  color: #9ab7a3;
+  font-size: 0.82rem;
+}
+.footer-bottom a:hover {
+  color: #e8f5e9;
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .footer-main {
+    grid-template-columns: 1fr 1fr;
+    gap: 28px 24px;
+  }
+}
+@media (max-width: 600px) {
+  .footer-main {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    padding: 32px 20px 20px;
+  }
+  .footer-bottom-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+}
